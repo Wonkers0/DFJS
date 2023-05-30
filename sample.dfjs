@@ -1,0 +1,3 @@
+function Join(): PlayerEvent {
+  const exampleVariable: Game = "hello"
+}

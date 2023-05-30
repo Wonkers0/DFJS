@@ -1,0 +1,26 @@
+{
+  "name": "dfjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/generator": "^7.22.3",
+    "@babel/parser": "^7.22.4",
+    "@babel/template": "^7.21.9",
+    "@babel/traverse": "^7.22.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.21.5",
+    "@babel/core": "^7.22.1",
+    "@babel/plugin-syntax-typescript": "^7.21.4",
+    "@babel/preset-env": "^7.22.4",
+    "@babel/types": "^7.22.4"
+  },
+  "type": "module"
+}
