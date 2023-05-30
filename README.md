@@ -12,7 +12,7 @@ function Join(): PlayerEvent {
 ```
 
 ```json
-({
+{
   "blocks": [{
     "id": "block",
     "block": "event",
@@ -45,7 +45,7 @@ function Join(): PlayerEvent {
     },
     "action": "="
   }]
-});
+}
 ```
 
 If you wish to help, make a new project and run:
