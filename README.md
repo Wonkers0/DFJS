@@ -55,10 +55,10 @@ function Join(): PlayerEvent {
 ```
 
 If you wish to help, make a new project and run:
-`git clone https://github.com/Wonkers0/DFJS.git`
-`cd ./DFJS`
-`npm i`
-`npm run transpile`
+- `git clone https://github.com/Wonkers0/DFJS.git`
+- `cd ./DFJS`
+- `npm i`
+- `npm run transpile`
 
 Source code is in the `src` directory
 
