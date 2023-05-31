@@ -13,38 +13,44 @@ function Join(): PlayerEvent {
 
 ```json
 {
-  "blocks": [{
-    "id": "block",
-    "block": "event",
-    "args": {
-      "items": []
+  "blocks": [
+    {
+      "id": "block",
+      "block": "event",
+      "args": {
+        "items": []
+      },
+      "action": "Join"
     },
-    "action": "Join"
-  }, {
-    "id": "block",
-    "block": "set_var",
-    "args": {
-      "items": [{
-        "item": {
-          "data": {
-            "name": "exampleVariable",
-            "scope": "unsaved"
+    {
+      "id": "block",
+      "block": "set_var",
+      "args": {
+        "items": [
+          {
+            "item": {
+              "data": {
+                "name": "exampleVariable",
+                "scope": "unsaved"
+              },
+              "id": "var"
+            },
+            "slot": 0
           },
-          "id": "var"
-        },
-        "slot": 0
-      }, {
-        "item": {
-          "data": {
-            "name": "hello"
-          },
-          "id": "txt"
-        },
-        "slot": 1
-      }]
-    },
-    "action": "="
-  }]
+          {
+            "item": {
+              "data": {
+                "name": "hello"
+              },
+              "id": "txt"
+            },
+            "slot": 1
+          }
+        ]
+      },
+      "action": "="
+    }
+  ]
 }
 ```
 
@@ -52,9 +58,9 @@ If you wish to help, make a new project and run:
 `git clone https://github.com/Wonkers0/DFJS.git`
 `cd ./DFJS`
 `npm i`
-`npx babel ./sample.dfjs`
+`npm run transpile`
 
-Source code is in `index.js`
+Source code is in the `src` directory
 
 If you've never used babel before, I recommend the following websites:
 

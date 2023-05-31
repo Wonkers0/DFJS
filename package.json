@@ -2,9 +2,10 @@
   "name": "dfjs",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "transpile": "tsc && npx babel ./sample.dfjs"
   },
   "keywords": [],
   "author": "",
@@ -13,14 +14,17 @@
     "@babel/generator": "^7.22.3",
     "@babel/parser": "^7.22.4",
     "@babel/template": "^7.21.9",
-    "@babel/traverse": "^7.22.4"
+    "@babel/traverse": "^7.22.4",
+    "requirejs": "^2.3.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.21.5",
     "@babel/core": "^7.22.1",
     "@babel/plugin-syntax-typescript": "^7.21.4",
     "@babel/preset-env": "^7.22.4",
-    "@babel/types": "^7.22.4"
+    "@babel/types": "^7.22.4",
+    "@types/babel__core": "^7.20.1",
+    "typescript": "^5.1.0-beta"
   },
   "type": "module"
 }
