@@ -1,6 +1,7 @@
 # Javascript to DF compiler
 
-This is a babel plugin for compiling javascript code to a DF template
+This is a babel plugin for compiling javascript code to a DF template.
+
 There is some special syntax, and it does not work with typescript, as it uses type annotations to specify variable scope.
 
 Example:
