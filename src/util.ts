@@ -1,5 +1,7 @@
 import * as BabelTypes from "@babel/types"
 
+import actionDump from "./actiondump.json"
+
 import {
   ArrayExpression,
   Identifier,
@@ -9,6 +11,8 @@ import {
   RegExpLiteral,
   TemplateLiteral,
 } from "../node_modules/@babel/types/lib/index"
+
+import { nanoid } from "nanoid"
 
 export type ValidLiteral = Exclude<
   Literal,
@@ -30,10 +34,12 @@ export function getVarScope(identifier: Identifier) {
     local: "local",
     game: "unsaved",
     save: "saved",
+    line: "line",
   }
 
   //@ts-ignore I cannot figure out babel types to save my life
-  const scope = identifier.typeAnnotation.typeAnnotation.typeName.name
+  // prettier-ignore
+  const scope = identifier.typeAnnotation?.typeAnnotation?.typeName?.name?.toLowerCase() ?? "line"
   if (varScopes[scope as keyof typeof varScopes] == null)
     throw new Error(
       `Variable scope ${scope} is not recognized. Acceptable scope values are: ${Object.keys(
@@ -43,33 +49,107 @@ export function getVarScope(identifier: Identifier) {
   return varScopes[scope as keyof typeof varScopes]
 }
 
-export function generateUniqueVarID() {
-  const chars =
-    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-=_+~`[];':\",<>./?".split(
-      ""
+export function getLineVar(t: typeof BabelTypes, name: string) {
+  // Create identifier node
+  const identifierNode = t.identifier(name)
+
+  // Set variable scope to 'local'
+  identifierNode.typeAnnotation = t.tsTypeAnnotation(
+    // @ts-ignore I'm probably doing some illegal things here to recreate the AST from the babel parser
+    t.tsTypeReference(t.identifier("line"))
+  )
+
+  return identifierNode
+}
+
+export function getElseObject(t: typeof BabelTypes) {
+  return t.objectExpression([
+    t.objectProperty(t.stringLiteral("id"), t.stringLiteral("block")),
+    t.objectProperty(t.stringLiteral("block"), t.stringLiteral("else")),
+  ])
+}
+
+export function getTempVarName() {
+  return `DFJS_${nanoid()}`
+}
+
+const blockNameMappings = {
+  "IF VARIABLE": "if_var",
+  "SET VARIABLE": "set_var",
+}
+
+export function getBlockTags(
+  t: typeof BabelTypes,
+  blockType: string,
+  blockAction: string,
+  tagValues: string[]
+) {
+  const tags = (actionDump as any).find(
+    (block: any) =>
+      (block.codeblockName.toLowerCase().split(" ").join("_") == blockType ||
+        blockNameMappings[
+          block.codeblockName as keyof typeof blockNameMappings
+        ] == blockType) &&
+      block.name == blockAction
+  )?.tags
+  if (!tags) return []
+
+  return tags.map((tag: any, i: number) =>
+    getArgObject(
+      t,
+      tag.slot,
+      {
+        option: tagValues[i] ?? tag.defaultOption,
+        tag: tag.name,
+        action: blockAction,
+        block: blockType,
+      },
+      "bl_tag"
     )
-  let id = ""
-  for (let i = 0; i < 8; i++)
-    id += chars[Math.floor(Math.random() * chars.length)]
-  return id
+  )
 }
 
 export function getBlockObject(
   t: typeof BabelTypes,
   blockType: string,
   blockAction: string,
-  args: any[] = []
+  args: any[] = [],
+  customAttributes: { [key: string]: any } = {},
+  tagValues: string[] = []
 ) {
+  const tags = getBlockTags(t, blockType, blockAction, tagValues)
+
   return t.objectExpression([
     t.objectProperty(t.stringLiteral("id"), t.stringLiteral("block")),
     t.objectProperty(t.stringLiteral("block"), t.stringLiteral(blockType)),
     t.objectProperty(
       t.stringLiteral("args"),
       t.objectExpression([
-        t.objectProperty(t.stringLiteral("items"), t.arrayExpression(args)),
+        t.objectProperty(
+          t.stringLiteral("items"),
+          t.arrayExpression([...args, ...tags])
+        ),
       ])
     ),
     t.objectProperty(t.stringLiteral("action"), t.stringLiteral(blockAction)),
+    ...Object.entries(customAttributes).map(([key, value]) =>
+      t.objectProperty(t.stringLiteral(key), value)
+    ),
+  ])
+}
+
+export function getBracketObject(
+  t: typeof BabelTypes,
+  type: "norm" | "sticky",
+  open: boolean
+) {
+  return t.objectExpression([
+    t.objectProperty(t.stringLiteral("id"), t.stringLiteral("bracket")),
+    t.objectProperty(t.stringLiteral("type"), t.stringLiteral(type)),
+    t.objectProperty(
+      t.stringLiteral("direct"),
+      t.stringLiteral(open ? "open" : "close")
+    ),
   ])
 }
 
@@ -92,10 +172,34 @@ export function getArgObject(
   ])
 }
 
-export function getValueType(t: typeof BabelTypes, value: Literal) {
+export function getValueData(
+  t: typeof BabelTypes,
+  value: ValidLiteral | Identifier
+) {
+  return {
+    name: getValue(t, value),
+    ...(t.isIdentifier(value)
+      ? {
+          scope: (value as Identifier).typeAnnotation
+            ? getVarScope(value as Identifier)
+            : "line",
+        }
+      : {}),
+  }
+}
+
+const textTypes = ["StyledText", "StyledTxt", "TxtComp", "TextComponent"]
+export function getValueType(
+  t: typeof BabelTypes,
+  value: ValidLiteral | Identifier
+) {
   // Get df value (such as "txt", "num", "var", etc.) from babel object (such as stringLiteral)
   if (t.isStringLiteral(value)) {
-    return "txt"
+    return textTypes.includes(
+      (value as unknown as any).typeAnnotation?.typeAnnotation?.typeName?.name
+    )
+      ? "comp"
+      : "txt"
   } else if (t.isNumericLiteral(value)) {
     return "num"
   } else if (t.isIdentifier(value)) {

@@ -1,3 +1,0 @@
-function Join(event): PlayerEvent {
-  const exampleVariable: game = 5 + 5 * 6;
-}

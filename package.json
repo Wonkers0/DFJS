@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "transpile": "tsc && npx babel ./sample.dfjs"
+    "transpile": "tsc && bun ./src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +15,12 @@
     "@babel/parser": "^7.22.4",
     "@babel/template": "^7.21.9",
     "@babel/traverse": "^7.22.4",
+    "@types/node": "^22.10.1",
+    "@types/pako": "^2.0.3",
+    "fs": "^0.0.1-security",
+    "nanoid": "^5.0.9",
+    "pako": "^2.1.0",
+    "path": "^0.12.7",
     "requirejs": "^2.3.6"
   },
   "devDependencies": {
