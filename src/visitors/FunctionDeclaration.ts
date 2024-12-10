@@ -42,25 +42,26 @@ export default (
           .properties[0] as BabelTypes.ObjectProperty
       ).value as BabelTypes.ArrayExpression
 
-      console.log(params.map((p) => p.typeAnnotation))
       itemsWrapper.elements = params.map((param, i) => {
-        const data = {
-          name: param.name,
-          type:
-            typeMappings[
-              (
+        return getArgObject(
+          t,
+          i,
+          {
+            name: param.name,
+            type:
+              typeMappings[
                 (
-                  (param.typeAnnotation as BabelTypes.TSTypeAnnotation)
-                    ?.typeAnnotation as BabelTypes.TSTypeReference
-                )?.typeName as BabelTypes.Identifier
-              )?.name as keyof typeof typeMappings
-            ] ?? "any",
-          plural: (param as unknown as any).plural ?? false,
-          optional: param.optional ?? false,
-        }
-
-        console.log(data)
-        return getArgObject(t, i, data, "pn_el")
+                  (
+                    (param.typeAnnotation as BabelTypes.TSTypeAnnotation)
+                      ?.typeAnnotation as BabelTypes.TSTypeReference
+                  )?.typeName as BabelTypes.Identifier
+                )?.name as keyof typeof typeMappings
+              ] ?? "any",
+            plural: (param as unknown as any).plural ?? false,
+            optional: param.optional ?? false,
+          },
+          "pn_el"
+        )
       })
     },
   } as VisitNode<PluginOptions, BabelTypes.FunctionDeclaration>)
