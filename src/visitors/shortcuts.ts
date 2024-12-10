@@ -34,7 +34,7 @@ export default {
         getArgObject(t, 2, { name: 1 }, "num"),
       ],
       [],
-      ["Decimal number"]
+      { "Rounding Mode": "Decimal number" }
     ),
   ],
   "Math.floor": (t, tempVar, args) => round(t, tempVar, args, "Floor"),
@@ -69,7 +69,7 @@ function round(
         ),
       ],
       [],
-      [tag]
+      { "Round Mode": tag }
     ),
   ]
 }

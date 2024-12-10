@@ -82,7 +82,7 @@ export function getBlockTags(
   t: typeof BabelTypes,
   blockType: string,
   blockAction: string,
-  tagValues: string[]
+  tagValues: { [tag: string]: string }
 ) {
   const tags = (actionDump as any).find(
     (block: any) =>
@@ -99,7 +99,7 @@ export function getBlockTags(
       t,
       tag.slot,
       {
-        option: tagValues[i] ?? tag.defaultOption,
+        option: tagValues[tag.name] ?? tag.defaultOption,
         tag: tag.name,
         action: blockAction,
         block: blockType,
@@ -115,7 +115,7 @@ export function getBlockObject(
   blockAction: string,
   args: any[] = [],
   customAttributes: { [key: string]: any } = {},
-  tagValues: string[] = []
+  tagValues: { [tag: string]: string } = {}
 ) {
   const tags = getBlockTags(t, blockType, blockAction, tagValues)
 
@@ -188,16 +188,14 @@ export function getValueData(
   }
 }
 
-const textTypes = ["StyledText", "StyledTxt", "TxtComp", "TextComponent"]
 export function getValueType(
   t: typeof BabelTypes,
   value: ValidLiteral | Identifier
 ) {
   // Get df value (such as "txt", "num", "var", etc.) from babel object (such as stringLiteral)
   if (t.isStringLiteral(value)) {
-    return textTypes.includes(
-      (value as unknown as any).typeAnnotation?.typeAnnotation?.typeName?.name
-    )
+    return (value as unknown as any).typeAnnotation?.typeAnnotation?.typeName
+      ?.name === "StyledText"
       ? "comp"
       : "txt"
   } else if (t.isNumericLiteral(value)) {

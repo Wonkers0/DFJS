@@ -6,6 +6,7 @@ import {
   getValueData,
   getTempVarName,
   getLineVar,
+  ValidLiteral,
 } from "../util.js"
 import { NodePath, VisitNode } from "@babel/traverse"
 import { PluginOptions } from "@babel/core"
@@ -17,6 +18,22 @@ export default (
   threadContents: BabelTypes.ObjectExpression[]
 ) =>
   ({
+    enter(path) {
+      const { callee, arguments: args } = path.node
+      if (t.isCallExpression(callee)) {
+        // @ts-ignore
+        callee.tags = (
+          args[0] as BabelTypes.ObjectExpression
+        ).properties.reduce((acc: Record<string, any>, prop) => {
+          acc[
+            ((prop as BabelTypes.ObjectProperty).key as ValidLiteral)
+              .value as string
+          ] = ((prop as BabelTypes.ObjectProperty).value as ValidLiteral).value
+          return acc
+        }, {})
+        path.replaceWith(callee)
+      }
+    },
     exit(path) {
       console.log("CallExpression")
       const { callee } = path.node
@@ -54,9 +71,22 @@ function ShortcutActions(
     path.replaceWith(getLineVar(t, tempVar))
   } else {
     threadContents.push(
-      getBlockObject(t, "call_func", "", [], {
-        data: t.stringLiteral(parsedCallee),
-      })
+      getBlockObject(
+        t,
+        "call_func",
+        "",
+        args.map((arg, i) =>
+          getArgObject(
+            t,
+            i,
+            getValueData(t, arg as any),
+            getValueType(t, arg as any)
+          )
+        ),
+        {
+          data: t.stringLiteral(parsedCallee),
+        }
+      )
     )
   }
 }
@@ -75,7 +105,8 @@ function CodeAction(
   threadContents: BabelTypes.ObjectExpression[],
   path: NodePath<BabelTypes.CallExpression>
 ) {
-  const { callee, arguments: args } = path.node
+  // @ts-ignore
+  const { callee, arguments: args, tags } = path.node
   const expression = callee as BabelTypes.MemberExpression
 
   threadContents.push(
@@ -101,7 +132,8 @@ function CodeAction(
         ? {
             attribute: t.stringLiteral("NOT"),
           }
-        : undefined
+        : undefined,
+      tags
     )
   )
 }

@@ -12,6 +12,9 @@ import AssignmentExpVisitor from "./visitors/AssignmentExpression"
 import IdentifierVisitor from "./visitors/Identifier"
 import ForOfStatementVisitor from "./visitors/ForOfStatement"
 import UnaryExpVisitor from "./visitors/UnaryExpression"
+import ArrayTypeVisitor from "./visitors/TSArrayType"
+import FunctionDeclarationVisitor from "./visitors/FunctionDeclaration"
+import AnyTypeAnnotationVisitor from "./visitors/AnyTypeAnnotation"
 
 export default (
   t: typeof BabelTypes,
@@ -28,4 +31,7 @@ export default (
   Identifier: IdentifierVisitor(t, threadContents),
   ForOfStatement: ForOfStatementVisitor(t, threadContents),
   UnaryExpression: UnaryExpVisitor(t, threadContents),
+  TSArrayType: ArrayTypeVisitor(t, threadContents),
+  FunctionDeclaration: FunctionDeclarationVisitor(t, threadContents),
+  AnyTypeAnnotation: AnyTypeAnnotationVisitor(t, threadContents),
 })

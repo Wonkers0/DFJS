@@ -75,7 +75,9 @@ export default function ({ types: t }: Babel): {
         ]
 
         // Traverse the function to gather the objects inside the function
-        path.traverse(visitors(t, threadContents) as Visitor<unknown>)
+        path.parentPath.traverse(
+          visitors(t, threadContents) as Visitor<unknown>
+        )
 
         // This is the root object of the diamondfire template
         const threadObject = t.objectExpression([
