@@ -1,6 +1,5 @@
 import * as BabelTypes from "@babel/types"
-
-import actionDump from "./actiondump.json"
+const actionDump = require("../actiondump.json")
 
 import {
   ArrayExpression,

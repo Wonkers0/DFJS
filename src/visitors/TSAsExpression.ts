@@ -8,7 +8,7 @@ export default (
 ) =>
   ({
     exit(path) {
-      console.log("TSAsExpression")
+      if (process.env.debug) console.log("TSAsExpression")
       const { expression, typeAnnotation } = path.node
 
       // @ts-ignore

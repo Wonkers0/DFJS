@@ -14,7 +14,7 @@ export default (
 ) =>
   ({
     exit(path) {
-      console.log("NewExpression")
+      if (process.env.debug) console.log("NewExpression")
       const { callee, arguments: args } = path.node
       if (!t.isIdentifier(callee) || !t.isObjectExpression(args[0])) return
       const objectType = (callee as BabelTypes.Identifier).name

@@ -8,7 +8,7 @@ export default (
 ) =>
   ({
     exit(path) {
-      console.log("AnyTypeAnnotation")
+      if (process.env.debug) console.log("AnyTypeAnnotation")
 
       path.replaceWith(t.genericTypeAnnotation(t.identifier("any")))
     },

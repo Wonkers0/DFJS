@@ -35,7 +35,7 @@ export default (
       }
     },
     exit(path) {
-      console.log("CallExpression")
+      if (process.env.debug) console.log("CallExpression")
       const { callee } = path.node
 
       if (

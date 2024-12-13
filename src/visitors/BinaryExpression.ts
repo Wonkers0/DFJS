@@ -17,7 +17,7 @@ export default (
 ) =>
   ({
     exit(path) {
-      console.log("Binary expression")
+      if (process.env.debug) console.log("Binary expression")
       const { operator } = path.node
 
       switch (operator) {

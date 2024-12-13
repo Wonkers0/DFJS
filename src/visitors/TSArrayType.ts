@@ -9,7 +9,7 @@ export default (
   ({
     exit(path) {
       const { elementType } = path.node
-      console.log("TSArrayType")
+      if (process.env.debug) console.log("TSArrayType")
 
       const identifier = path.findParent((p) => t.isIdentifier(p.node))
       // @ts-ignore

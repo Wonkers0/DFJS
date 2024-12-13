@@ -9,7 +9,7 @@ export default (
 ) =>
   ({
     enter(path) {
-      console.log("BlockStatement")
+      if (process.env.debug) console.log("BlockStatement")
 
       if ((path.parent as BabelTypes.IfStatement).alternate == path.node)
         threadContents.push(getElseObject(t))

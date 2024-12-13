@@ -19,7 +19,7 @@ export default (
     exit(path) {
       const { operator, left, right } = path.node
 
-      console.log("AssignmentExpression")
+      if (process.env.debug) console.log("AssignmentExpression")
 
       switch (operator) {
         case "+=":

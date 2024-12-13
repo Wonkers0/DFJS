@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "transpile": "tsc && bun ./src/index.ts"
+    "transpile": "if [ -d build ] && [ -z \"$(ls -A build)\" ]; then tsc; fi && bun ./src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -17,8 +17,10 @@
     "@babel/traverse": "^7.22.4",
     "@types/node": "^22.10.1",
     "@types/pako": "^2.0.3",
+    "chalk": "^5.3.0",
     "fs": "^0.0.1-security",
     "nanoid": "^5.0.9",
+    "ora": "^8.1.1",
     "pako": "^2.1.0",
     "path": "^0.12.7",
     "requirejs": "^2.3.6"

@@ -1,3 +1,3 @@
 {
-  "plugins": ["./build/plugin.js"]
+  "plugins": ["./src/plugin.ts"]
 }

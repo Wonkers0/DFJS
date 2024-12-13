@@ -28,7 +28,7 @@ export default (
         params: BabelTypes.Identifier[]
       }
 
-      console.log("FunctionDeclaration")
+      if (process.env.debug) console.log("FunctionDeclaration")
 
       const argsWrapper = threadContents[0].properties.find(
         (p) =>

@@ -5,7 +5,7 @@ import {
   getArgObject,
   getValueType,
   parseValueToLiteral,
-} from "./util.js"
+} from "./util"
 import { PluginOptions, Visitor, types } from "@babel/core"
 
 export interface Babel {

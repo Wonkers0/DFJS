@@ -27,7 +27,7 @@ export default (
       }
       if (init == null) return // Unitialized variables such as `const example;` do not need to be parsed
 
-      console.log("Variable Declarator")
+      if (process.env.debug) console.log("Variable Declarator")
 
       // Push block object to threadContents array above holding the objects in the parent function
       threadContents.push(
