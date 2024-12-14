@@ -92,6 +92,22 @@ export function getElseObject(t: typeof BabelTypes) {
   ])
 }
 
+export function parseObjectExpression(
+  t: typeof BabelTypes,
+  expression: ObjectExpression
+) {
+  return expression.properties.reduce((acc, prop) => {
+    const key = (prop as BabelTypes.ObjectProperty).key
+    const resolvedKey = t.isStringLiteral(key)
+      ? key.value
+      : (key as Identifier).name
+    const value = (prop as BabelTypes.ObjectProperty)
+      .value as BabelTypes.Expression
+    acc[resolvedKey] = value
+    return acc
+  }, {} as { [key: string]: BabelTypes.Expression })
+}
+
 export function getTempName() {
   return `DFJS_${nanoid()}`
 }

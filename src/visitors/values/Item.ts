@@ -5,6 +5,7 @@ import {
   getValueType,
   ValidLiteral,
   getValueData,
+  parseObjectExpression,
 } from "../../util"
 
 export default function Item(
@@ -96,4 +97,38 @@ export default function Item(
         ),
       ])
     )
+
+  if (constructor.tags) {
+    const sanitizedTags = parseObjectExpression(
+      t,
+      constructor.tags as BabelTypes.ObjectExpression
+    )
+
+    for (const [key, value] of Object.entries(sanitizedTags))
+      threadContents.push(
+        getBlockObject(t, "set_var", "SetItemTag", [
+          getArgObject(
+            t,
+            0,
+            {
+              name: varName,
+              scope: "line",
+            },
+            "var"
+          ),
+          getArgObject(
+            t,
+            2,
+            getValueData(t, t.stringLiteral(key)),
+            getValueType(t, t.stringLiteral(key))
+          ),
+          getArgObject(
+            t,
+            3,
+            getValueData(t, value as ValidLiteral),
+            getValueType(t, value as ValidLiteral)
+          ),
+        ])
+      )
+  }
 }
