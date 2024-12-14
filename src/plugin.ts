@@ -30,6 +30,7 @@ export const actionBlocks = {
   Else: "else",
   IfEntity: "if_entity",
   Function: "func",
+  Process: "process",
 }
 
 export default function ({ types: t }: Babel): {
@@ -66,7 +67,7 @@ export default function ({ types: t }: Babel): {
             eventType,
             id.name,
             [],
-            eventType === "func"
+            eventType === "func" || eventType === "process"
               ? {
                   data: t.stringLiteral(id.name),
                 }

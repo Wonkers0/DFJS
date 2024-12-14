@@ -1,6 +1,7 @@
 import * as BabelTypes from "@babel/types"
 import { VisitNode } from "@babel/traverse"
 import { PluginOptions } from "@babel/core"
+import { flags } from "../util"
 
 export default (
   t: typeof BabelTypes,
@@ -9,7 +10,7 @@ export default (
   ({
     exit(path) {
       const { elementType } = path.node
-      if (process.env.debug) console.log("TSArrayType")
+      if (flags.debug) console.log("TSArrayType")
 
       const identifier = path.findParent((p) => t.isIdentifier(p.node))
       // @ts-ignore

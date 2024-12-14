@@ -7,6 +7,7 @@ import {
   getValueData,
   getLineVar,
   getTempVarName,
+  flags,
 } from "../util.js"
 import { NodePath, VisitNode } from "@babel/traverse"
 import { PluginOptions } from "@babel/core"
@@ -17,7 +18,7 @@ export default (
 ) =>
   ({
     exit(path) {
-      if (process.env.debug) console.log("Binary expression")
+      if (flags.debug) console.log("Binary expression")
       const { operator } = path.node
 
       switch (operator) {

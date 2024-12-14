@@ -7,6 +7,7 @@ import {
   getTempVarName,
   getLineVar,
   ValidLiteral,
+  flags,
 } from "../util.js"
 import { NodePath, VisitNode } from "@babel/traverse"
 import { PluginOptions } from "@babel/core"
@@ -35,7 +36,7 @@ export default (
       }
     },
     exit(path) {
-      if (process.env.debug) console.log("CallExpression")
+      if (flags.debug) console.log("CallExpression")
       const { callee } = path.node
 
       if (

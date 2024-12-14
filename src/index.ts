@@ -4,6 +4,8 @@ import * as path from "path"
 import { gzip } from "pako"
 import chalk from "chalk"
 import ora, { oraPromise } from "ora"
+import { flags } from "./util"
+import { exit } from "process"
 
 const compileFolderWithBabel = async (folder: string) => {
   console.log(
@@ -41,7 +43,9 @@ const compileFolderWithBabel = async (folder: string) => {
       }
 
       const sanitizedCode = result.code.slice(1, -2)
-      return btoa(String.fromCharCode.apply(null, [...gzip(sanitizedCode)]))
+      return {
+        [file]: btoa(String.fromCharCode.apply(null, [...gzip(sanitizedCode)])),
+      }
     })
   )
 
@@ -50,9 +54,28 @@ const compileFolderWithBabel = async (folder: string) => {
     successText: `Code transpiled in ${(performance.now() - start).toFixed(
       3
     )}ms`,
+    failText: "Could not transpile code",
   })
 
   return (await transpilePromise).filter(Boolean)
 }
 
-console.log(await compileFolderWithBabel("./code"))
+const templates = await compileFolderWithBabel("./code")
+if (!flags.codeclient) {
+  console.log(templates)
+  exit(0)
+}
+const ws = new WebSocket("ws://localhost:31375/ws")
+
+ws.onopen = () => {
+  templates.forEach((template) => {
+    const fileName = Object.keys(template!)[0]
+    ws.send(
+      `give {id:ender_chest,count:1,components:{custom_name:'{"extra":[{"bold":true,"color":"#fdba74","extra":[{"color":"#c3c3c3","text":"─ "}],"text":"DFJS "},{"color":"#e5e5e5","text":"${fileName}"}],"italic":false,"text":""}',custom_data:{PublicBukkitValues:{"hypercube:codetemplatedata": '{"author":"DFJS","name":"§b${fileName}","version":1,"code":"${
+        Object.values(template!)[0]
+      }"}'}}}}`
+    )
+  })
+
+  ws.close()
+}

@@ -7,6 +7,7 @@ import {
   getValueData,
   getLineVar,
   getTempVarName,
+  flags,
 } from "../util.js"
 import { VisitNode } from "@babel/traverse"
 import { PluginOptions } from "@babel/core"
@@ -19,7 +20,7 @@ export default (
     exit(path) {
       const { operator, left, right } = path.node
 
-      if (process.env.debug) console.log("AssignmentExpression")
+      if (flags.debug) console.log("AssignmentExpression")
 
       switch (operator) {
         case "+=":

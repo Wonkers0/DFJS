@@ -1,5 +1,5 @@
 import * as BabelTypes from "@babel/types"
-import { getLineVar, getTempVarName } from "../util.js"
+import { flags, getLineVar, getTempVarName } from "../util.js"
 import { VisitNode } from "@babel/traverse"
 import { PluginOptions } from "@babel/core"
 import Item from "./values/Item"
@@ -14,7 +14,7 @@ export default (
 ) =>
   ({
     exit(path) {
-      if (process.env.debug) console.log("NewExpression")
+      if (flags.debug) console.log("NewExpression")
       const { callee, arguments: args } = path.node
       if (!t.isIdentifier(callee) || !t.isObjectExpression(args[0])) return
       const objectType = (callee as BabelTypes.Identifier).name

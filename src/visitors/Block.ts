@@ -1,5 +1,5 @@
 import * as BabelTypes from "@babel/types"
-import { getBracketObject, getElseObject } from "../util.js"
+import { flags, getBracketObject, getElseObject } from "../util.js"
 import { VisitNode } from "@babel/traverse"
 import { PluginOptions } from "@babel/core"
 
@@ -9,7 +9,7 @@ export default (
 ) =>
   ({
     enter(path) {
-      if (process.env.debug) console.log("BlockStatement")
+      if (flags.debug) console.log("BlockStatement")
 
       if ((path.parent as BabelTypes.IfStatement).alternate == path.node)
         threadContents.push(getElseObject(t))

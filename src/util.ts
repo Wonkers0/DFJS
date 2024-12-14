@@ -1,6 +1,22 @@
 import * as BabelTypes from "@babel/types"
 const actionDump = require("../actiondump.json")
 
+export const { values: flags } = parseArgs({
+  args: process.argv,
+  options: {
+    debug: {
+      type: "boolean",
+      default: false,
+    },
+    codeclient: {
+      type: "boolean",
+      default: true,
+    },
+  },
+  strict: true,
+  allowPositionals: true,
+})
+
 import {
   ArrayExpression,
   Identifier,
@@ -12,6 +28,7 @@ import {
 } from "../node_modules/@babel/types/lib/index"
 
 import { nanoid } from "nanoid"
+import { parseArgs } from "node:util"
 
 export type ValidLiteral = Exclude<
   Literal,

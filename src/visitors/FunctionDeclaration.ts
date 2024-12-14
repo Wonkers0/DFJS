@@ -1,7 +1,7 @@
 import * as BabelTypes from "@babel/types"
 import { VisitNode } from "@babel/traverse"
 import { PluginOptions } from "@babel/core"
-import { getArgObject } from "../util"
+import { flags, getArgObject } from "../util"
 
 const typeMappings = {
   String: "txt",
@@ -28,7 +28,7 @@ export default (
         params: BabelTypes.Identifier[]
       }
 
-      if (process.env.debug) console.log("FunctionDeclaration")
+      if (flags.debug) console.log("FunctionDeclaration")
 
       const argsWrapper = threadContents[0].properties.find(
         (p) =>

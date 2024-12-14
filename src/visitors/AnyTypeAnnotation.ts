@@ -1,6 +1,7 @@
 import * as BabelTypes from "@babel/types"
 import { VisitNode } from "@babel/traverse"
 import { PluginOptions } from "@babel/core"
+import { flags } from "../util"
 
 export default (
   t: typeof BabelTypes,
@@ -8,7 +9,7 @@ export default (
 ) =>
   ({
     exit(path) {
-      if (process.env.debug) console.log("AnyTypeAnnotation")
+      if (flags.debug) console.log("AnyTypeAnnotation")
 
       path.replaceWith(t.genericTypeAnnotation(t.identifier("any")))
     },
