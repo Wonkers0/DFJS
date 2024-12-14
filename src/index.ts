@@ -4,8 +4,34 @@ import * as path from "path"
 import { gzip } from "pako"
 import chalk from "chalk"
 import ora, { oraPromise } from "ora"
-import { flags } from "./util"
-import { exit } from "process"
+import { WebSocket } from "ws"
+
+const transpileFile = async (filePath: string) => {
+  const inputCode = fs.readFileSync(filePath, "utf-8")
+  const result = await babel.transformAsync(inputCode, {
+    filename: path.basename(filePath),
+    sourceMaps: true,
+  })
+
+  if (!result || !result.code) {
+    throw new Error("Failed to compile with Babel")
+  }
+
+  const parsedArray = JSON.parse(result.code.slice(0, -1))
+  return parsedArray.flatMap((thread: any) =>
+    thread.map((o: any) =>
+      btoa(String.fromCharCode.apply(null, [...gzip(JSON.stringify(o))]))
+    )
+  )
+}
+
+const sendToGame = (ws: WebSocket, templates: string[]) => {
+  if (ws.readyState === WebSocket.OPEN) {
+    ws.send("place swap")
+    templates.forEach((template) => ws.send(`place ${template}`))
+    ws.send("place go")
+  }
+}
 
 const compileFolderWithBabel = async (folder: string) => {
   console.log(
@@ -25,31 +51,11 @@ const compileFolderWithBabel = async (folder: string) => {
   )
 
   const start = performance.now()
-  // Read the input file
   const transpilePromise = Promise.all(
     fs.readdirSync(folder).map(async (file) => {
       const filePath = path.join(folder, file)
       if (!fs.lstatSync(filePath).isFile()) return
-      const inputCode = fs.readFileSync(filePath, "utf-8")
-
-      // Compile the code with Babel
-      const result = await babel.transformAsync(inputCode, {
-        filename: path.basename(filePath),
-        sourceMaps: true,
-      })
-
-      if (!result || !result.code) {
-        throw new Error("Failed to compile with Babel")
-      }
-
-      // Remove semi-colon at the end of the code and parse the babel string to an array
-      const parsedArray = JSON.parse(result.code.slice(0, -1))
-
-      return parsedArray.flatMap((thread: any) =>
-        thread.map((o: any) =>
-          btoa(String.fromCharCode.apply(null, [...gzip(JSON.stringify(o))]))
-        )
-      )
+      return transpileFile(filePath)
     })
   )
 
@@ -64,22 +70,60 @@ const compileFolderWithBabel = async (folder: string) => {
   return (await transpilePromise).flat().filter(Boolean)
 }
 
-const templates = await compileFolderWithBabel("./code")
-if (!flags.codeclient || flags.debug) {
-  console.log(templates)
-  exit(0)
+const main = async () => {
+  const templates = await compileFolderWithBabel("./code")
+  const ws = new WebSocket("ws://localhost:31375/ws")
+
+  process.stdin.resume()
+  console.log(
+    chalk.green("\nWatching for file changes... Press Ctrl+C to exit\n")
+  )
+
+  ws.onopen = () => {
+    ws.send("scopes write_code clear_plot")
+  }
+
+  ws.onmessage = (event) => {
+    if (event.data !== "auth") return
+    sendToGame(ws, templates)
+  }
+
+  let debounceTimer: ReturnType<typeof setTimeout> | null = null
+
+  fs.watch("./code", { recursive: true }, async (event, filename) => {
+    if (!filename?.endsWith(".dfjs")) return
+
+    if (debounceTimer) {
+      clearTimeout(debounceTimer)
+    }
+
+    debounceTimer = setTimeout(async () => {
+      const start = performance.now()
+      const spinner = ora(`Re-transpiling ${filename}...`).start()
+      try {
+        const filePath = path.join("./code", filename)
+        const newTemplates = await transpileFile(filePath)
+        templates.length = 0
+        templates.push(...newTemplates)
+
+        const ms = (performance.now() - start).toFixed(3)
+        spinner.succeed(`Re-transpiled ${filename} (${ms}ms)`)
+        sendToGame(ws, templates)
+      } catch (error) {
+        spinner.fail(`Failed to re-transpile ${filename}`)
+        console.error(chalk.red(error))
+      }
+    }, 1500)
+  })
+
+  process.on("SIGINT", () => {
+    console.log(chalk.yellow("\nGracefully shutting down..."))
+    ws.close()
+    process.exit(0)
+  })
 }
-const ws = new WebSocket("ws://localhost:31375/ws")
 
-ws.onopen = () => ws.send("scopes write_code clear_plot")
-
-ws.onmessage = (event) => {
-  if (event.data !== "auth") return
-
-  ws.send("clear")
-
-  templates.forEach((template) => ws.send(`place ${template}`))
-
-  ws.send("place go")
-  setTimeout(() => ws.close(), 1000)
-}
+main().catch((error) => {
+  console.error(chalk.red("Error in main:"), error)
+  process.exit(1)
+})
