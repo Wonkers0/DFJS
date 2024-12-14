@@ -16,6 +16,9 @@ export const { values: flags } = parseArgs({
       type: "string",
       default: "basic",
     },
+    nosplitting: {
+      type: "boolean",
+    },
   },
   strict: true,
   allowPositionals: true,
@@ -110,23 +113,25 @@ export function getBlockTags(
         blockNameMappings[
           block.codeblockName as keyof typeof blockNameMappings
         ] == blockType) &&
-      block.name == blockAction
+      (block.name == blockAction || block.name == "dynamic")
   )?.tags
   if (!tags) return []
 
-  return tags.map((tag: any, i: number) =>
-    getArgObject(
-      t,
-      tag.slot,
-      {
-        option: tagValues[tag.name] ?? tag.defaultOption,
-        tag: tag.name,
-        action: blockAction,
-        block: blockType,
-      },
-      "bl_tag"
+  return tags
+    .map((tag: any, i: number) =>
+      getArgObject(
+        t,
+        tag.slot,
+        {
+          option: tagValues[tag.name] ?? tag.defaultOption,
+          tag: tag.name,
+          action: blockType == "start_process" ? "dynamic" : blockAction,
+          block: blockType,
+        },
+        "bl_tag"
+      )
     )
-  )
+    .reverse()
 }
 
 export function getBlockObject(

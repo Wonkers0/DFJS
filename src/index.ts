@@ -35,7 +35,7 @@ const compileFolderWithBabel = async (folder: string) => {
       // Compile the code with Babel
       const result = await babel.transformAsync(inputCode, {
         filename: path.basename(filePath),
-        sourceMaps: true, // Generate source maps
+        sourceMaps: true,
       })
 
       if (!result || !result.code) {
@@ -45,8 +45,10 @@ const compileFolderWithBabel = async (folder: string) => {
       // Remove semi-colon at the end of the code and parse the babel string to an array
       const parsedArray = JSON.parse(result.code.slice(0, -1))
 
-      return parsedArray.map((o: any) =>
-        btoa(String.fromCharCode.apply(null, [...gzip(JSON.stringify(o))]))
+      return parsedArray.flatMap((thread: any) =>
+        thread.map((o: any) =>
+          btoa(String.fromCharCode.apply(null, [...gzip(JSON.stringify(o))]))
+        )
       )
     })
   )

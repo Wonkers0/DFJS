@@ -13,7 +13,6 @@ import IdentifierVisitor from "./visitors/Identifier"
 import ForOfStatementVisitor from "./visitors/ForOfStatement"
 import UnaryExpVisitor from "./visitors/UnaryExpression"
 import ArrayTypeVisitor from "./visitors/TSArrayType"
-import FunctionDeclarationVisitor from "./visitors/FunctionDeclaration"
 import AnyTypeAnnotationVisitor from "./visitors/AnyTypeAnnotation"
 import WhileStatementVisitor from "./visitors/WhileStatement"
 
@@ -33,7 +32,6 @@ export default (
   ForOfStatement: ForOfStatementVisitor(t, threadContents),
   UnaryExpression: UnaryExpVisitor(t, threadContents),
   TSArrayType: ArrayTypeVisitor(t, threadContents),
-  FunctionDeclaration: FunctionDeclarationVisitor(t, threadContents),
   AnyTypeAnnotation: AnyTypeAnnotationVisitor(t, threadContents),
   WhileStatement: WhileStatementVisitor(t, threadContents),
 })

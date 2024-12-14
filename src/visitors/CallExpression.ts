@@ -133,6 +133,12 @@ function CodeAction(
         ? {
             attribute: t.stringLiteral("NOT"),
           }
+        : // @ts-ignore
+        actionBlocks[expression.object.name] === "start_process"
+        ? {
+            // @ts-ignore
+            data: t.stringLiteral(expression.property.name),
+          }
         : undefined,
       tags
     )

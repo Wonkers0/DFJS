@@ -9,6 +9,7 @@ import {
   getTempName,
 } from "./util"
 import { PluginOptions, Visitor, types } from "@babel/core"
+import FunctionDeclarationVisitor from "./visitors/FunctionDeclaration"
 
 export interface Babel {
   types: typeof BabelTypes
@@ -78,9 +79,9 @@ export default function ({ types: t }: Babel): {
         ]
 
         // Traverse the function to gather the objects inside the function
-        path.parentPath.traverse(
-          visitors(t, threadContents) as Visitor<unknown>
-        )
+        path.traverse(visitors(t, threadContents) as Visitor<unknown>)
+        // @ts-ignore EXTREMELY illegal but it works 💀
+        FunctionDeclarationVisitor(t, threadContents).exit(path)
 
         // Split the thread into chunks to make sure it fits in the plot's codespace
         const threadChunks = splitThread(t, threadContents)
@@ -99,6 +100,26 @@ export default function ({ types: t }: Babel): {
         path.replaceWith(t.arrayExpression(threadObjects))
         path.skip() // Do not traverse the new node
       },
+      Program: {
+        exit(path) {
+          // The body of the program is made up of array statements (each array statement is a thread)
+          // e.g. []; []; [] ... etc.
+          // These statements need to be grouped under a single array
+          // e.g. [ [], [], [] ... etc. ]
+
+          path.node.body = [
+            t.expressionStatement(
+              t.arrayExpression(
+                path.node.body.map(
+                  (arrExp) =>
+                    (arrExp as BabelTypes.ExpressionStatement)
+                      .expression as BabelTypes.ArrayExpression
+                )
+              )
+            ),
+          ]
+        },
+      },
     },
   }
 }
@@ -114,7 +135,8 @@ function splitThread(t: typeof BabelTypes, threadContents: any[]) {
   const maxCodeBlocks =
     (plotSizes[flags.plot as keyof typeof plotSizes] ?? 50) / 2 - 1
 
-  if (threadContents.length < maxCodeBlocks) return [threadContents]
+  if (threadContents.length < maxCodeBlocks || flags.nosplitting)
+    return [threadContents]
   // Split the list into lists of length plotSize
   const threadChunks: (typeof threadContents)[] = []
   let funcName = getTempName()

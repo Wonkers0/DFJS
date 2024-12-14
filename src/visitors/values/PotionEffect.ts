@@ -13,14 +13,6 @@ export default function PotionEffect(
   constructor: { [key: string]: BabelTypes.Expression },
   varName: string
 ) {
-  constructor = Object.assign(
-    {
-      duration: t.numericLiteral(1000000),
-      amplifier: t.numericLiteral(0),
-    },
-    constructor
-  )
-
   threadContents.push(
     getBlockObject(t, "set_var", "SetPotionType", [
       getArgObject(
@@ -41,43 +33,45 @@ export default function PotionEffect(
     ])
   )
 
-  threadContents.push(
-    getBlockObject(t, "set_var", "SetPotionDur", [
-      getArgObject(
-        t,
-        0,
-        {
-          name: varName,
-          scope: "line",
-        },
-        "var"
-      ),
-      getArgObject(
-        t,
-        1,
-        getValueData(t, constructor.duration as ValidLiteral),
-        getValueType(t, constructor.duration as ValidLiteral)
-      ),
-    ])
-  )
+  if (constructor.duration != undefined)
+    threadContents.push(
+      getBlockObject(t, "set_var", "SetPotionDur", [
+        getArgObject(
+          t,
+          0,
+          {
+            name: varName,
+            scope: "line",
+          },
+          "var"
+        ),
+        getArgObject(
+          t,
+          1,
+          getValueData(t, constructor.duration as ValidLiteral),
+          getValueType(t, constructor.duration as ValidLiteral)
+        ),
+      ])
+    )
 
-  threadContents.push(
-    getBlockObject(t, "set_var", "SetPotionAmp", [
-      getArgObject(
-        t,
-        0,
-        {
-          name: varName,
-          scope: "line",
-        },
-        "var"
-      ),
-      getArgObject(
-        t,
-        1,
-        getValueData(t, constructor.amplifier as ValidLiteral),
-        getValueType(t, constructor.amplifier as ValidLiteral)
-      ),
-    ])
-  )
+  if (constructor.amplifier != undefined)
+    threadContents.push(
+      getBlockObject(t, "set_var", "SetPotionAmp", [
+        getArgObject(
+          t,
+          0,
+          {
+            name: varName,
+            scope: "line",
+          },
+          "var"
+        ),
+        getArgObject(
+          t,
+          1,
+          getValueData(t, constructor.amplifier as ValidLiteral),
+          getValueType(t, constructor.amplifier as ValidLiteral)
+        ),
+      ])
+    )
 }

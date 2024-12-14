@@ -75,4 +75,25 @@ export default function Item(
         ),
       ])
     )
+
+  if (constructor.amount)
+    threadContents.push(
+      getBlockObject(t, "set_var", "SetItemAmount", [
+        getArgObject(
+          t,
+          0,
+          {
+            name: varName,
+            scope: "line",
+          },
+          "var"
+        ),
+        getArgObject(
+          t,
+          1,
+          getValueData(t, constructor.amount as ValidLiteral),
+          getValueType(t, constructor.amount as ValidLiteral)
+        ),
+      ])
+    )
 }

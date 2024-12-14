@@ -7,6 +7,8 @@ import Sound from "./values/Sound"
 import Location from "./values/Location"
 import PotionEffect from "./values/PotionEffect"
 import GameValue from "./values/GameValue.js"
+import Particle from "./values/Particle.js"
+import Vector from "./values/Vector.js"
 
 export default (
   t: typeof BabelTypes,
@@ -49,6 +51,12 @@ export default (
           break
         case "GameValue":
           GameValue(t, threadContents, sanitizedConstructor, tempVar)
+          break
+        case "Particle":
+          Particle(t, threadContents, sanitizedConstructor, tempVar)
+          break
+        case "Vector":
+          Vector(t, threadContents, sanitizedConstructor, tempVar)
           break
       }
 
