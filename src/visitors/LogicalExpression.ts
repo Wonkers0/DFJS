@@ -9,22 +9,22 @@ export default (
 ) =>
   ({
     exit(path) {
-      const { operator, argument } = path.node
+      const { operator, left, right } = path.node
       if (flags.debug) console.log("UnaryExpression")
 
       switch (operator) {
-        case "-":
-        case "+":
-          if (t.isNumericLiteral(argument))
-            path.replaceWith(
-              t.numericLiteral(parseFloat(`${operator}${argument.value}`))
-            )
+        case "&&":
+          path.replaceWith(t.binaryExpression("*", left, right))
           break
-        case "!":
+        case "||":
           path.replaceWith(
-            t.binaryExpression("-", t.numericLiteral(1), argument)
+            t.binaryExpression(
+              ">=",
+              t.binaryExpression("+", left, right),
+              t.numericLiteral(1)
+            )
           )
           break
       }
     },
-  } as VisitNode<PluginOptions, BabelTypes.UnaryExpression>)
+  } as VisitNode<PluginOptions, BabelTypes.LogicalExpression>)

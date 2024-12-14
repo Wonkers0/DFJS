@@ -85,6 +85,7 @@ const main = async () => {
 
   ws.onmessage = (event) => {
     if (event.data !== "auth") return
+    ws.send("clear") // Clear the plot on first transpilation
     sendToGame(ws, templates)
   }
 

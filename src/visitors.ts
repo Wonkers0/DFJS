@@ -15,6 +15,7 @@ import UnaryExpVisitor from "./visitors/UnaryExpression"
 import ArrayTypeVisitor from "./visitors/TSArrayType"
 import AnyTypeAnnotationVisitor from "./visitors/AnyTypeAnnotation"
 import WhileStatementVisitor from "./visitors/WhileStatement"
+import LogicalExpVisitor from "./visitors/LogicalExpression"
 
 export default (
   t: typeof BabelTypes,
@@ -34,4 +35,5 @@ export default (
   TSArrayType: ArrayTypeVisitor(t, threadContents),
   AnyTypeAnnotation: AnyTypeAnnotationVisitor(t, threadContents),
   WhileStatement: WhileStatementVisitor(t, threadContents),
+  LogicalExpression: LogicalExpVisitor(t, threadContents),
 })

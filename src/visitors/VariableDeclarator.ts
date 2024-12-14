@@ -7,6 +7,7 @@ import {
   getValueData,
   getVarScope,
   flags,
+  isBooleanContext,
 } from "../util.js"
 import { NodePath, VisitNode } from "@babel/traverse"
 import { PluginOptions } from "@babel/core"
@@ -17,9 +18,20 @@ export default (
 ) =>
   ({
     enter(path) {
-      const { init } = path.node
+      const { init, id } = path.node
 
-      if (isBooleanContext(t, init)) booleanContext(t, path)
+      if (
+        t.isIdentifier(id) &&
+        t.isCallExpression(init) &&
+        t.isMemberExpression(init.callee) &&
+        t.isIdentifier(init.callee.object) &&
+        init.callee.object.name === "SetVariable"
+      ) {
+        init.arguments.unshift(id)
+        path.replaceWith(init)
+        return
+      }
+      if (isBooleanContext(t, init)) return
     },
     exit(path) {
       const { init, id } = path.node as {
@@ -49,53 +61,3 @@ export default (
       )
     },
   } as VisitNode<PluginOptions, BabelTypes.VariableDeclarator>)
-
-function booleanContext(
-  t: typeof BabelTypes,
-  path: NodePath<BabelTypes.VariableDeclarator>
-) {
-  const { init, id } = path.node as {
-    init: BabelTypes.Expression
-    id: BabelTypes.Identifier
-  }
-
-  // Create the if statement
-  const ifStatement = t.ifStatement(
-    init, // condition
-    t.blockStatement([
-      t.variableDeclaration("const", [
-        t.variableDeclarator(id, t.numericLiteral(1)),
-      ]),
-    ]),
-    t.blockStatement([
-      t.variableDeclaration("const", [
-        t.variableDeclarator(id, t.numericLiteral(0)),
-      ]),
-    ])
-  )
-
-  // Replace the current node with the if statement
-  path.replaceWith(ifStatement)
-}
-
-const booleanOperators = ["==", "===", "!=", "!==", ">", "<", ">=", "<="]
-function isBooleanContext(
-  t: typeof BabelTypes,
-  init: BabelTypes.Expression | null | undefined
-) {
-  if (t.isBinaryExpression(init) && booleanOperators.includes(init.operator))
-    return true
-  if (t.isCallExpression(init)) {
-    const callExp = init as BabelTypes.CallExpression
-    if (t.isMemberExpression(callExp.callee)) {
-      const memberExp = callExp.callee as BabelTypes.MemberExpression
-      if (
-        t.isIdentifier(memberExp.object) &&
-        memberExp.object.name.includes("If")
-      )
-        return true
-    }
-  }
-
-  return t.isUnaryExpression(init)
-}

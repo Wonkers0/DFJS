@@ -8,11 +8,14 @@ import {
   getLineVar,
   ValidLiteral,
   flags,
+  isBooleanContext,
 } from "../util.js"
-import { NodePath, VisitNode } from "@babel/traverse"
+import { NodePath, VisitNode, Visitor } from "@babel/traverse"
 import { PluginOptions } from "@babel/core"
 import { actionBlocks } from "../plugin"
 import shortcuts from "./shortcuts"
+import visitors from "../visitors.js"
+import generate from "@babel/generator"
 
 export default (
   t: typeof BabelTypes,
@@ -106,6 +109,12 @@ function CodeAction(
   threadContents: BabelTypes.ObjectExpression[],
   path: NodePath<BabelTypes.CallExpression>
 ) {
+  if (
+    isBooleanContext(t, path.node) &&
+    !path.findParent((p) => t.isIfStatement(p.node))
+  )
+    return booleanContext(t, threadContents, path, path.node)
+
   // @ts-ignore
   const { callee, arguments: args, tags } = path.node
   const expression = callee as BabelTypes.MemberExpression
@@ -129,12 +138,8 @@ function CodeAction(
               )
         )
         .filter(Boolean),
-      path.findParent((p) => p.isUnaryExpression())
-        ? {
-            attribute: t.stringLiteral("NOT"),
-          }
-        : // @ts-ignore
-        actionBlocks[expression.object.name] === "start_process"
+      // @ts-ignore
+      actionBlocks[expression.object.name] === "start_process"
         ? {
             // @ts-ignore
             data: t.stringLiteral(expression.property.name),
@@ -143,4 +148,43 @@ function CodeAction(
       tags
     )
   )
+}
+
+export function booleanContext(
+  t: typeof BabelTypes,
+  threadContents: BabelTypes.ObjectExpression[],
+  path: NodePath<any>,
+  condition: BabelTypes.Expression
+) {
+  const id = t.identifier(getTempName())
+
+  // Create the if statement
+  // traverse the if statement below
+
+  const ifStatement = t.ifStatement(
+    condition,
+    t.blockStatement([
+      t.variableDeclaration("const", [
+        t.variableDeclarator(id, t.numericLiteral(1)),
+      ]),
+    ]),
+    t.blockStatement([
+      t.variableDeclaration("const", [
+        t.variableDeclarator(id, t.numericLiteral(0)),
+      ]),
+    ])
+  )
+
+  // Replace the current node with the variable
+  path.replaceWith(id)
+  // Find the closest parent directly within the line starter function
+  const closestParent = path.findParent((p) =>
+    t.isFunctionDeclaration(p.parentPath?.parent)
+  )
+  const insertedNode = closestParent?.insertBefore(ifStatement)?.[0]
+
+  if (insertedNode) {
+    insertedNode.traverse(visitors(t, threadContents) as Visitor<unknown>)
+    insertedNode.shouldSkip = true
+  }
 }

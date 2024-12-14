@@ -276,3 +276,25 @@ export function parseValueToLiteral(
 
   throw new Error("Unsupported value type: " + typeof value)
 }
+
+const booleanOperators = ["==", "===", "!=", "!==", ">", "<", ">=", "<="]
+export function isBooleanContext(
+  t: typeof BabelTypes,
+  init: BabelTypes.Expression | null | undefined
+) {
+  if (t.isBinaryExpression(init) && booleanOperators.includes(init.operator))
+    return true
+  if (t.isCallExpression(init)) {
+    const callExp = init as BabelTypes.CallExpression
+    if (t.isMemberExpression(callExp.callee)) {
+      const memberExp = callExp.callee as BabelTypes.MemberExpression
+      if (
+        t.isIdentifier(memberExp.object) &&
+        memberExp.object.name.includes("If")
+      )
+        return true
+    }
+  }
+
+  return t.isUnaryExpression(init)
+}

@@ -11,6 +11,7 @@ import {
 } from "../util.js"
 import { NodePath, VisitNode } from "@babel/traverse"
 import { PluginOptions } from "@babel/core"
+import { booleanContext } from "./CallExpression.js"
 
 export default (
   t: typeof BabelTypes,
@@ -36,9 +37,9 @@ export default (
         case "<":
         case ">=":
         case "<=":
-          path.findParent((p) => p.isIfStatement())
-            ? conditionalContext(t, threadContents, path)
-            : null
+          if (!path.findParent((p) => t.isIfStatement(p.node)))
+            booleanContext(t, threadContents, path, path.node)
+          else conditionalContext(t, threadContents, path)
           break
       }
     },

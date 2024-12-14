@@ -40,6 +40,17 @@ export default {
   "Math.floor": (t, tempVar, args) => round(t, tempVar, args, "Floor"),
   "Math.round": (t, tempVar, args) => round(t, tempVar, args, "Nearest"),
   "Math.ceil": (t, tempVar, args) => round(t, tempVar, args, "Ceiling"),
+  "Math.abs": (t, tempVar, args) => [
+    getBlockObject(t, "set_var", "AbsoluteValue", [
+      getArgObject(t, 0, lvar(tempVar), "var"),
+      getArgObject(
+        t,
+        1,
+        getValueData(t, args[0] as any),
+        getValueType(t, args[0] as any)
+      ),
+    ]),
+  ],
 } as {
   [key: string]: (
     t: typeof BabelTypes,
