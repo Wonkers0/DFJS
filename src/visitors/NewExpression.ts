@@ -1,5 +1,5 @@
 import * as BabelTypes from "@babel/types"
-import { flags, getLineVar, getTempVarName } from "../util.js"
+import { flags, getLineVar, getTempName } from "../util.js"
 import { VisitNode } from "@babel/traverse"
 import { PluginOptions } from "@babel/core"
 import Item from "./values/Item"
@@ -32,7 +32,7 @@ export default (
         {} as { [key: string]: BabelTypes.Expression }
       )
 
-      const tempVar = getTempVarName()
+      const tempVar = getTempName()
 
       switch (objectType) {
         case "Item":

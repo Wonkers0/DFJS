@@ -6,7 +6,7 @@ import {
   ValidLiteral,
   getValueData,
   getLineVar,
-  getTempVarName,
+  getTempName,
   flags,
 } from "../util.js"
 import { NodePath, VisitNode } from "@babel/traverse"
@@ -59,7 +59,7 @@ function arithmeticContext(
     "**": "Exponent",
   }
 
-  const tempVar = getTempVarName()
+  const tempVar = getTempName()
   threadContents.push(
     getBlockObject(
       t,

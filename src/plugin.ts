@@ -5,6 +5,8 @@ import {
   getArgObject,
   getValueType,
   parseValueToLiteral,
+  flags,
+  getTempName,
 } from "./util"
 import { PluginOptions, Visitor, types } from "@babel/core"
 
@@ -80,18 +82,66 @@ export default function ({ types: t }: Babel): {
           visitors(t, threadContents) as Visitor<unknown>
         )
 
-        // This is the root object of the diamondfire template
-        const threadObject = t.objectExpression([
-          t.objectProperty(
-            t.stringLiteral("blocks"),
-            t.arrayExpression(threadContents)
-          ),
-        ])
+        // Split the thread into chunks to make sure it fits in the plot's codespace
+        const threadChunks = splitThread(t, threadContents)
 
-        // Final step!!! Replace the original code with the threadObject defined above
-        path.replaceWith(threadObject)
+        // This is the root object of the diamondfire template
+        const threadObjects = threadChunks.map((thread) =>
+          t.objectExpression([
+            t.objectProperty(
+              t.stringLiteral("blocks"),
+              t.arrayExpression(thread)
+            ),
+          ])
+        )
+
+        // Final step!!! Replace the original code with the threadObjects defined above
+        path.replaceWith(t.arrayExpression(threadObjects))
         path.skip() // Do not traverse the new node
       },
     },
   }
+}
+
+function splitThread(t: typeof BabelTypes, threadContents: any[]) {
+  const plotSizes = {
+    basic: 50,
+    large: 100,
+    massive: 300,
+    mega: 1000,
+  }
+
+  const maxCodeBlocks =
+    (plotSizes[flags.plot as keyof typeof plotSizes] ?? 50) / 2 - 1
+
+  if (threadContents.length < maxCodeBlocks) return [threadContents]
+  // Split the list into lists of length plotSize
+  const threadChunks: (typeof threadContents)[] = []
+  let funcName = getTempName()
+  for (let i = 0; i < threadContents.length; i += maxCodeBlocks) {
+    const slice = threadContents.slice(i, i + maxCodeBlocks)
+
+    // Check first if it's not the last slice in the thread
+    if (i + maxCodeBlocks < threadContents.length) {
+      slice.push(
+        getBlockObject(t, "call_func", "", [], {
+          data: t.stringLiteral(funcName),
+        })
+      )
+    }
+
+    if (threadChunks.length != 0) {
+      slice.unshift(
+        getBlockObject(t, "func", funcName, [], {
+          data: t.stringLiteral(funcName),
+        })
+      )
+
+      funcName = getTempName()
+    }
+
+    threadChunks.push(slice)
+  }
+
+  return threadChunks
 }

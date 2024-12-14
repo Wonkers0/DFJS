@@ -42,10 +42,12 @@ const compileFolderWithBabel = async (folder: string) => {
         throw new Error("Failed to compile with Babel")
       }
 
-      const sanitizedCode = result.code.slice(1, -2)
-      return {
-        [file]: btoa(String.fromCharCode.apply(null, [...gzip(sanitizedCode)])),
-      }
+      // Remove semi-colon at the end of the code and parse the babel string to an array
+      const parsedArray = JSON.parse(result.code.slice(0, -1))
+
+      return parsedArray.map((o: any) =>
+        btoa(String.fromCharCode.apply(null, [...gzip(JSON.stringify(o))]))
+      )
     })
   )
 
@@ -57,25 +59,25 @@ const compileFolderWithBabel = async (folder: string) => {
     failText: "Could not transpile code",
   })
 
-  return (await transpilePromise).filter(Boolean)
+  return (await transpilePromise).flat().filter(Boolean)
 }
 
 const templates = await compileFolderWithBabel("./code")
-if (!flags.codeclient) {
+if (!flags.codeclient || flags.debug) {
   console.log(templates)
   exit(0)
 }
 const ws = new WebSocket("ws://localhost:31375/ws")
 
-ws.onopen = () => {
-  templates.forEach((template) => {
-    const fileName = Object.keys(template!)[0]
-    ws.send(
-      `give {id:ender_chest,count:1,components:{custom_name:'{"extra":[{"bold":true,"color":"#fdba74","extra":[{"color":"#c3c3c3","text":"─ "}],"text":"DFJS "},{"color":"#e5e5e5","text":"${fileName}"}],"italic":false,"text":""}',custom_data:{PublicBukkitValues:{"hypercube:codetemplatedata": '{"author":"DFJS","name":"§b${fileName}","version":1,"code":"${
-        Object.values(template!)[0]
-      }"}'}}}}`
-    )
-  })
+ws.onopen = () => ws.send("scopes write_code clear_plot")
 
-  ws.close()
+ws.onmessage = (event) => {
+  if (event.data !== "auth") return
+
+  ws.send("clear")
+
+  templates.forEach((template) => ws.send(`place ${template}`))
+
+  ws.send("place go")
+  setTimeout(() => ws.close(), 1000)
 }

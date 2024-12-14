@@ -7,7 +7,7 @@ import {
   getValueData,
   getVarScope,
   getLineVar,
-  getTempVarName,
+  getTempName,
 } from "../util.js"
 import { NodePath, VisitNode } from "@babel/traverse"
 import { PluginOptions } from "@babel/core"
@@ -20,7 +20,7 @@ export default (
     exit(path) {
       const { elements } = path.node
 
-      const tempVar = getTempVarName()
+      const tempVar = getTempName()
       threadContents.push(
         getBlockObject(t, "set_var", "CreateList", [
           getArgObject(

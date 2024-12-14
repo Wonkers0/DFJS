@@ -6,7 +6,7 @@ import {
   ValidLiteral,
   getValueData,
   getLineVar,
-  getTempVarName,
+  getTempName,
   flags,
 } from "../util.js"
 import { VisitNode } from "@babel/traverse"

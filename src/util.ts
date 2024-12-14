@@ -12,6 +12,10 @@ export const { values: flags } = parseArgs({
       type: "boolean",
       default: true,
     },
+    plot: {
+      type: "string",
+      default: "basic",
+    },
   },
   strict: true,
   allowPositionals: true,
@@ -85,7 +89,7 @@ export function getElseObject(t: typeof BabelTypes) {
   ])
 }
 
-export function getTempVarName() {
+export function getTempName() {
   return `DFJS_${nanoid()}`
 }
 

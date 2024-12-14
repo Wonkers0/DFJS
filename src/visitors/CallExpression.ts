@@ -4,7 +4,7 @@ import {
   getArgObject,
   getValueType,
   getValueData,
-  getTempVarName,
+  getTempName,
   getLineVar,
   ValidLiteral,
   flags,
@@ -60,7 +60,7 @@ function ShortcutActions(
   path: NodePath<BabelTypes.CallExpression>
 ) {
   const { callee, arguments: args } = path.node
-  const tempVar = getTempVarName()
+  const tempVar = getTempName()
   const parsedCallee = parseCallee(t, callee as BabelTypes.Expression)
   if (parsedCallee === undefined)
     throw new Error("Could not parse callee in CallExpression shortcut action")
