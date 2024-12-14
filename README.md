@@ -1,14 +1,25 @@
+![DFJS](https://github.com/user-attachments/assets/b51d2dd9-07c5-4d5d-b311-c61e16b23216)
+
 # Javascript to DF compiler
 
 This is a babel plugin for compiling javascript code to a DF template.
 
-There is some special syntax, and it does not work with typescript, as it uses type annotations to specify variable scope.
+There is some special syntax, as it uses type annotations to specify variable scope.
+
+To use, make a new project and run:
+```sh
+git clone https://github.com/Wonkers0/DFJS.git
+cd ./DFJS
+bun i
+bun transpile
+```
 
 Example:
 
 ```javascript
 function Join(): PlayerEvent {
   const exampleVariable: Game = "hello"
+  
 }
 ```
 
@@ -54,14 +65,13 @@ function Join(): PlayerEvent {
   ]
 }
 ```
-
-If you wish to help, make a new project and run:
-- `git clone https://github.com/Wonkers0/DFJS.git`
-- `cd ./DFJS`
-- `npm i`
-- `npm run transpile`
-
+## Contributing
 Source code is in the `src` directory
+
+Make sure you use the `--debug` flag:
+```sh
+bun transpile --debug
+```
 
 If you've never used babel before, I recommend the following websites:
 
