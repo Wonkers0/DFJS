@@ -9,6 +9,7 @@ import {
   ValidLiteral,
   flags,
   isBooleanContext,
+  parseObjectExpression,
 } from "../util.js"
 import { NodePath, VisitNode, Visitor } from "@babel/traverse"
 import { PluginOptions } from "@babel/core"
@@ -26,15 +27,10 @@ export default (
       const { callee, arguments: args } = path.node
       if (t.isCallExpression(callee)) {
         // @ts-ignore
-        callee.tags = (
+        callee.tags = parseObjectExpression(
+          t,
           args[0] as BabelTypes.ObjectExpression
-        ).properties.reduce((acc: Record<string, any>, prop) => {
-          acc[
-            ((prop as BabelTypes.ObjectProperty).key as ValidLiteral)
-              .value as string
-          ] = ((prop as BabelTypes.ObjectProperty).value as ValidLiteral).value
-          return acc
-        }, {})
+        )
         path.replaceWith(callee)
       }
     },
@@ -74,12 +70,14 @@ function ShortcutActions(
     )
     path.replaceWith(getLineVar(t, tempVar))
   } else {
+    const isDynamic =
+      parsedCallee === "StartProcess" || parsedCallee === "CallFunction"
     threadContents.push(
       getBlockObject(
         t,
-        "call_func",
+        parsedCallee === "StartProcess" ? "start_process" : "call_func",
         "",
-        args.map((arg, i) =>
+        (isDynamic ? args.slice(1) : args).map((arg, i) =>
           getArgObject(
             t,
             i,
@@ -88,7 +86,11 @@ function ShortcutActions(
           )
         ),
         {
-          data: t.stringLiteral(parsedCallee),
+          data: isDynamic
+            ? t.isIdentifier(args[0])
+              ? t.stringLiteral(`%var(${args[0].name})`)
+              : args[0]
+            : t.stringLiteral(parsedCallee),
         }
       )
     )

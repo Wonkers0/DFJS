@@ -6,6 +6,8 @@ import chalk from "chalk"
 import ora, { oraPromise } from "ora"
 import { WebSocket } from "ws"
 
+const extension = ".df.ts"
+
 const transpileFile = async (filePath: string) => {
   const inputCode = fs.readFileSync(filePath, "utf-8")
   const result = await babel.transformAsync(inputCode, {
@@ -54,7 +56,7 @@ const compileFolderWithBabel = async (folder: string) => {
   const transpilePromise = Promise.all(
     fs.readdirSync(folder).map(async (file) => {
       const filePath = path.join(folder, file)
-      if (!fs.lstatSync(filePath).isFile() || !filePath.endsWith(".df.ts"))
+      if (!fs.lstatSync(filePath).isFile() || !filePath.endsWith(extension))
         return
       return transpileFile(filePath)
     })
@@ -93,7 +95,7 @@ const main = async () => {
   let debounceTimer: ReturnType<typeof setTimeout> | null = null
 
   fs.watch("./code", { recursive: true }, async (event, filename) => {
-    if (!filename?.endsWith(".dfjs")) return
+    if (!filename?.endsWith(extension)) return
 
     if (debounceTimer) {
       clearTimeout(debounceTimer)
