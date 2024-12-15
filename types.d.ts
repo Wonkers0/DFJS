@@ -15,7 +15,7 @@ type Process = any;
 /*@ts-ignore*/
 declare class GameValue {
   constructor(data: {
-    type: "Current Health" | "Maximum Health" | "Absorption Health" | "Food Level" | "Food Saturation" | "Food Exhaustion" | "Attack Damage" | "Attack Speed" | "Attack Cooldown" | "Attack Cooldown Ticks" | "Armor Points" | "Armor Toughness" | "Invulnerability Ticks" | "Experience Level" | "Experience Progress" | "Fire Ticks" | "Freeze Ticks" | "Remaining Air" | "Fall Distance" | "Held Slot" | "Ping" | "Steer Sideways Movement" | "Steer Forward Movement" | "Item Usage Progress" | "Flight Speed" | "Walk Speed" | "Location" | "Target Block Location" | "Target Block Side" | "Eye Location" | "X-Coordinate" | "Y-Coordinate" | "Z-Coordinate" | "Midpoint Location" | "Pitch" | "Yaw" | "Body Yaw" | "Standing Block Location" | "Spawn Location" | "Velocity" | "Direction" | "Entity Width" | "Entity Height" | "Main Hand Item" | "Off Hand Item" | "Armor Items" | "Hotbar Items" | "Inventory Items" | "Cursor Item" | "Inventory Menu Items" | "Saddle Item" | "Entity Item" | "Name " | "UUID" | "Entity Type" | "Game Mode" | "Open Inventory Title " | "Potion Effects" | "Vehicle" | "Passengers " | "Lead Holder" | "Attached Leads" | "Targeted Entity UUID" | "Projectile Shooter UUID" | "Display Entity Translation" | "Display Entity Scale" | "Pose" | "Event Block Location" | "Event Block Side" | "Event Damage" | "Damage Event Cause" | "Raw Event Damage" | "Event Death Message" | "Event Heal Amount" | "Heal Event Cause" | "Event Explosion Affected Blocks" | "Event Power" | "Event Command" | "Event Command Arguments" | "Event Item" | "Event Hotbar Slot" | "Event Clicked Slot Index" | "Event Clicked Slot Item" | "Event Clicked Slot New Item" | "Close Inventory Event Cause" | "Inventory Event Click Type" | "Fish Event Cause" | "Teleport Event Cause" | "Teleport Location" | "Exhaustion Event Cause" | "Event Exhaustion" | "Transform Event Cause" | "Event Transform Entities" | "Event Hit Type" | "Player Count" | "CPU Usage" | "Server TPS" | "Timestamp" | "Selection Size" | "Selection Target Names" | "Selection Target UUIDs" | "Plot ID" | "Plot Size" | "Microseconds Since Startup" | "Active Block Transactions" | "Plot Player Names" | "Plot Player UUIDs";
+    type: "Current Health" | "Maximum Health" | "Absorption Health" | "Food Level" | "Food Saturation" | "Food Exhaustion" | "Attack Damage" | "Attack Speed" | "Attack Cooldown" | "Attack Cooldown Ticks" | "Armor Points" | "Armor Toughness" | "Invulnerability Ticks" | "Experience Level" | "Experience Progress" | "Fire Ticks" | "Freeze Ticks" | "Remaining Air" | "Fall Distance" | "Held Slot" | "Ping" | "Steer Sideways Movement" | "Steer Forward Movement" | "Item Usage Progress" | "Flight Speed" | "Walk Speed" | "Location" | "Target Block Location" | "Target Block Side" | "Eye Location" | "X-Coordinate" | "Y-Coordinate" | "Z-Coordinate" | "Midpoint Location" | "Pitch" | "Yaw" | "Body Yaw" | "Standing Block Location" | "Spawn Location" | "Velocity" | "Direction" | "Entity Width" | "Entity Height" | "Main Hand Item" | "Off Hand Item" | "Armor Items" | "Hotbar Items" | "Inventory Items" | "Cursor Item" | "Inventory Menu Items" | "Saddle Item" | "Entity Item" | "Name" | "UUID" | "Entity Type" | "Game Mode" | "Open Inventory Title" | "Potion Effects" | "Vehicle" | "Passengers" | "Lead Holder" | "Attached Leads" | "Targeted Entity UUID" | "Projectile Shooter UUID" | "Display Entity Translation" | "Display Entity Scale" | "Pose" | "Event Block Location" | "Event Block Side" | "Event Damage" | "Damage Event Cause" | "Raw Event Damage" | "Event Death Message" | "Event Heal Amount" | "Heal Event Cause" | "Event Explosion Affected Blocks" | "Event Power" | "Event Command" | "Event Command Arguments" | "Event Item" | "Event Hotbar Slot" | "Event Clicked Slot Index" | "Event Clicked Slot Item" | "Event Clicked Slot New Item" | "Close Inventory Event Cause" | "Inventory Event Click Type" | "Fish Event Cause" | "Teleport Event Cause" | "Teleport Location" | "Exhaustion Event Cause" | "Event Exhaustion" | "Transform Event Cause" | "Event Transform Entities" | "Event Hit Type" | "Player Count" | "CPU Usage" | "Server TPS" | "Timestamp" | "Selection Size" | "Selection Target Names" | "Selection Target UUIDs" | "Plot ID" | "Plot Size" | "Microseconds Since Startup" | "Active Block Transactions" | "Plot Player Names" | "Plot Player UUIDs";
     target?: "Default" | "Selection" | "Killer" | "Damager" | "Victim" | "Shooter" | "Projectile" | "LastEntity";
   });
 }
@@ -262,6 +262,7 @@ declare namespace PlayerAction {
   function SetMaxHealth(arg1: Number): (tags: {
     "Heal Player to Max Health"?: "True" | "False";
   }) => void;
+  function RemoveBossBar(arg1: Number): (tags: {}) => void;
   function SetFogDistance(arg1: Number): (tags: {}) => void;
   function AdventureMode(): (tags: {}) => void;
   function SpectatorMode(): (tags: {}) => void;
@@ -274,6 +275,11 @@ declare namespace PlayerAction {
   }) => void;
   function ScoreLineFormat(arg1: StyledText, arg2: StyledText): (tags: {
     "Number Format"?: "Fixed" | "Styled" | "Blank" | "Reset";
+  }) => void;
+  function SetBossBar(arg1: StyledText | null, arg2: Number | null, arg3: Number | null, arg4: Number | null): (tags: {
+    "Bar Style"?: "Solid" | "6 segments" | "10 segments" | "12 segments" | "20 segments";
+    "Sky Effect"?: "None" | "Create fog" | "Darken sky" | "Both";
+    "Bar Color"?: "Red" | "Purple" | "Pink" | "Blue" | "Green" | "Yellow" | "White";
   }) => void;
   function SetSkin(arg1: Item): (tags: {}) => void;
   function SpectatorCollision(): (tags: {
@@ -293,6 +299,9 @@ declare namespace PlayerAction {
   }) => void;
   function RmWorldBorder(): (tags: {}) => void;
   function ResourcePack(arg1: String): (tags: {}) => void;
+  function SetInvName(arg1: StyledText): (tags: {
+    "Alignment Mode"?: "Regular" | "Centered";
+  }) => void;
   function GiveExhaustion(arg1: Number): (tags: {}) => void;
   function Teleport(arg1: Location): (tags: {
     "Keep Current Rotation"?: "True" | "False";
@@ -361,6 +370,7 @@ declare namespace PlayerAction {
     "Animation Arm"?: "Swing main arm" | "Swing off arm";
   }) => void;
   function DisplayHologram(arg1: Location, arg2: StyledText): (tags: {}) => void;
+  function SetAbsorption(arg1: Number): (tags: {}) => void;
   function ShowInv(...arg1): (tags: {}) => void;
   function SetFoodLevel(arg1: Number): (tags: {}) => void;
   function PlayerDisguise(arg1: StyledText, arg2: Item | null): (tags: {}) => void;
@@ -407,6 +417,7 @@ declare namespace SetVariable {
   function ShiftRotation(arg1: Variable, arg2: Location | null, arg3: Number): (tags: {
     "Rotation Axis"?: "Pitch" | "Yaw";
   }) => void;
+  function GetItemName(arg1: Variable, arg2: Item): (tags: {}) => StyledText;
   function GetItemRarity(arg1: Variable, arg2: Item): (tags: {}) => String;
   function MultiplyVector(arg1: Variable, arg2: Vector | null, arg3: Number): (tags: {}) => Vector;
   function Bitwise(arg1: Variable, arg2: Number, arg3: Number | null): (tags: {
@@ -506,6 +517,10 @@ declare namespace SetVariable {
     "Breakability"?: "Breakable" | "Unbreakable";
   }) => void;
   function SetMaxAmount(arg1: Variable, arg2: Item | null, arg3: Number | null): (tags: {}) => void;
+  function GetSignText(arg1: Variable, arg2: Location): (tags: {
+    "Sign Line"?: "1" | "2" | "3" | "4" | "All lines";
+    "Sign Side"?: "Front" | "Back";
+  }) => StyledText;
   function SetDictValue(arg1: Variable, arg2: String): (tags: {}) => void;
   function SetAllCoords(arg1: Variable, arg2: Location | null, arg3: Number | null, arg4: Number | null, arg5: Number | null, arg6: Number | null, arg7: Number | null): (tags: {
     "Coordinate Type"?: "Plot coordinate" | "World coordinate";
@@ -513,6 +528,7 @@ declare namespace SetVariable {
   function RGBColor(arg1: Variable, arg2: Number, arg3: Number, arg4: Number): (tags: {}) => void;
   function SetCanDestroy(arg1: Variable, arg2: Item | null): (tags: {}) => void;
   function HSLColor(arg1: Variable, arg2: Number, arg3: Number | null, arg4: Number | null): (tags: {}) => void;
+  function GetItemLore(arg1: Variable, arg2: Item): (tags: {}) => void;
   function RemoveListIndex(arg1: Variable, ...arg2): (tags: {}) => void;
   function CellularNoise(arg1: Variable, arg2: Location, arg3: Number | null, arg4: Number | null, arg5: Number | null, arg6: Number | null, arg7: Number | null, arg8: Number | null, arg9: Number | null, arg10: Number | null, arg11: Number | null, arg12: Number | null, arg13: Number | null): (tags: {
     "Return Type"?: "Voronoi" | "Worley" | "Secondary" | "Additive" | "Subtractive" | "Divisive" | "Multiplicative" | "Origin";
@@ -548,6 +564,7 @@ declare namespace SetVariable {
   function SetItemGlowing(arg1: Variable, arg2: Item | null): (tags: {
     "Glowing"?: "Enable" | "Disable" | "Default";
   }) => void;
+  function SetItemName(arg1: Variable, arg2: Item | null, ...arg3): (tags: {}) => void;
   function SetLodestoneLoc(arg1: Variable, arg2: Item | null, arg3: Location): (tags: {
     "Require Lodestone at Location"?: "True" | "False";
   }) => void;
@@ -565,6 +582,7 @@ declare namespace SetVariable {
   function GetLight(arg1: Variable, arg2: Location): (tags: {
     "Light Type"?: "Combined light" | "Sky light" | "Block light";
   }) => Number;
+  function GetBookText(arg1: Variable, arg2: Item, arg3: Number | null): (tags: {}) => StyledText;
   function GetDictValues(arg1: Variable): (tags: {}) => void;
   function Vector(arg1: Variable, arg2: Number, arg3: Number, arg4: Number): (tags: {}) => Vector;
   function Distance(arg1: Variable, arg2: Location, arg3: Location): (tags: {
@@ -614,9 +632,22 @@ declare namespace SetVariable {
   function GetColorChannels(arg1: Variable, arg2: String): (tags: {
     "Color Channels"?: "RGB" | "HSB" | "HSL";
   }) => void;
+  function SetDirection(arg1: Variable, arg2: Location | null, arg3: Vector): (tags: {}) => Location;
   function SetListValue(arg1: Variable, arg2: Number): (tags: {}) => void;
+  function SetItemEnchants(arg1: Variable, arg2: Item | null): (tags: {}) => void;
   function SetBookText(arg1: Variable, arg2: Item | null, arg3: StyledText[], arg4: StyledText, arg5: Number): (tags: {}) => void;
   function RandomValue(arg1: Variable): (tags: {}) => void;
+  function SetItemFlags(arg1: Variable, arg2: Item | null): (tags: {
+    "Armor Trim"?: "Hide" | "Show" | "No Change";
+    "Color"?: "Hide" | "Show" | "No Change";
+    "Enchantments"?: "Hide" | "Show" | "No Change";
+    "Attributes"?: "Hide" | "Show" | "No Change";
+    "Unbreakable"?: "Hide" | "Show" | "No Change";
+    "Can Destroy"?: "Hide" | "Show" | "No Change";
+    "Can Place On"?: "Hide" | "Show" | "No Change";
+    "Potion Effects"?: "Hide" | "Show" | "No Change";
+    "Others"?: "Hide" | "Show" | "No Change";
+  }) => void;
   function SetItemType(arg1: Variable, arg2: Item | null, arg3: String): (tags: {}) => void;
   function GetSoundType(arg1: Variable, arg2: Sound): (tags: {}) => String;
   function GetListValue(arg1: Variable, arg2: Number): (tags: {}) => void;
@@ -641,6 +672,7 @@ declare namespace SetVariable {
   function AddVectors(arg1: Variable, ...arg2): (tags: {}) => Vector;
   function GetParticleFade(arg1: Variable, arg2: Particle): (tags: {}) => String;
   function SetItemTool(arg1: Variable, arg2: Item | null, arg3: Number | null, arg4: Number | null): (tags: {}) => void;
+  function GetItemEnchants(arg1: Variable, arg2: Item): (tags: {}) => void;
   function SetHeadTexture(arg1: Variable, arg2: Item | null, arg3: String): (tags: {}) => void;
   function PerlinNoise(arg1: Variable, arg2: Location, arg3: Number | null, arg4: Number | null, arg5: Number | null, arg6: Number | null, arg7: Number | null): (tags: {
     "Fractal Type"?: "Brownian" | "Billow (Dark edges)" | "Rigid (Light edges)";
@@ -652,6 +684,9 @@ declare namespace SetVariable {
   function SetItemColor(arg1: Variable, arg2: Item | null, arg3: String): (tags: {}) => void;
   function GetParticleColor(arg1: Variable, arg2: Particle): (tags: {}) => String;
   function SetSoundPitch(arg1: Variable, arg2: Sound | null, arg3: Number, arg4: String): (tags: {}) => void;
+  function RoundNumber(arg1: Variable, arg2: Number | null, arg3: Number | null): (tags: {
+    "Round Mode"?: "Floor" | "Nearest" | "Ceiling";
+  }) => Number;
   function GetCanPlaceOn(arg1: Variable, arg2: Item): (tags: {}) => void;
   function SortList(arg1: Variable): (tags: {
     "Sort Order"?: "Ascending" | "Descending";
@@ -668,6 +703,7 @@ declare namespace SetVariable {
     "Inherit Styles"?: "True" | "False";
   }) => void;
   function GetMiniMessageExpr(arg1: Variable, arg2: StyledText): (tags: {}) => String;
+  function SetItemLore(arg1: Variable, arg2: Item | null, arg3: (StyledText | null)[], arg4: StyledText | null, arg5: Number): (tags: {}) => void;
   function SetItemEffects(arg1: Variable, arg2: Item | null, ...arg3): (tags: {}) => void;
   function GetItemTag(arg1: Variable, arg2: Item, arg3: String): (tags: {}) => void;
   function CreateList(arg1: Variable): (tags: {}) => void;
@@ -785,6 +821,9 @@ declare namespace EntityAction {
   }) => void;
   function SetAge(arg1: Number): (tags: {
     "Age Lock"?: "Enable" | "Disable" | "Don't change";
+  }) => void;
+  function SetName(arg1: StyledText): (tags: {
+    "Name Tag Visibility"?: "Always" | "Default" | "Never" | "Don't change";
   }) => void;
   function SetArmsRaised(): (tags: {
     "Arms Raised"?: "Enable" | "Disable";
@@ -980,6 +1019,9 @@ declare namespace EntityAction {
     "Arms"?: "Enable" | "Disable" | "Don't change";
     "Base Plate"?: "Enable" | "Disable" | "Don't change";
   }) => void;
+  function SetNameVisible(): (tags: {
+    "Name Tag Visibility"?: "Always" | "Default" | "Never";
+  }) => void;
   function SetTarget(arg1: String[], arg2: StyledText[]): (tags: {
     "Ignore Formatting"?: "True" | "False";
   }) => void;
@@ -992,6 +1034,9 @@ declare namespace EntityAction {
   function SetInvulTicks(arg1: Number): (tags: {}) => void;
   function SetShulkerPeek(arg1: Number): (tags: {
     "Is Silent"?: "Enable" | "Disable";
+  }) => void;
+  function SetPose(): (tags: {
+    "Pose"?: "Standing" | "Sleeping" | "Swimming" | "Sneaking";
   }) => void;
   function SetRearing(): (tags: {
     "Rearing"?: "Enable" | "Disable";
@@ -1144,6 +1189,9 @@ declare namespace IfVariable {
   function VarIsType(): (tags: {
     "Variable Type"?: "Number" | "String" | "Styled Text" | "Location" | "Item" | "List" | "Potion effect" | "Sound" | "Particle" | "Vector" | "Dictionary";
   }) => void;
+  function InRange(): (tags: {
+    "Location Handling"?: "Block" | "Exact";
+  }) => void;
   function VarExists(arg1: Variable): (tags: {}) => void;
   function BlockIsSolid(): (tags: {}) => void;
   function ItemEquals(arg1: Item, ...arg2): (tags: {
@@ -1220,6 +1268,7 @@ declare namespace Repeat {
     "Point Locations Inwards"?: "True" | "False";
   }) => boolean;
   function Forever(): (tags: {}) => boolean;
+  function Range(arg1: Variable | null, arg2: Number, arg3: Number, arg4: Number | null): (tags: {}) => boolean;
   function ForEachEntry(arg1: Variable, arg2: Variable): (tags: {}) => boolean;
 }
 declare namespace GameAction {
@@ -1294,6 +1343,7 @@ declare namespace GameAction {
   }) => void;
   function SpawnPotionCloud(arg1: Location, arg2: (PotionEffect | null)[], arg3: StyledText | null, arg4: Number | null, arg5: Number | null): (tags: {}) => void;
   function LaunchProj(arg1: Location, arg2: StyledText | null, arg3: Number | null, arg4: Number | null): (tags: {}) => void;
+  function SetBlock(arg1: Location[]): (tags: {}) => void;
   function SpawnItemDisp(arg1: Location, arg2: Item): (tags: {}) => void;
   function SetBlockGrowth(arg1: Location, arg2: Number | null): (tags: {
     "Growth Unit"?: "Growth Stage Number" | "Growth Percentage";
@@ -1336,6 +1386,11 @@ declare namespace IfGame {
   function EventItemEquals(...arg1): (tags: {
     "Comparison Mode"?: "Exactly equals" | "Ignore stack size/durability" | "Material only";
   }) => void;
+  function SignHasTxt(arg1: Location, ...arg2): (tags: {
+    "Sign Line"?: "1" | "2" | "3" | "4" | "All lines";
+    "Sign Side"?: "Front" | "Back";
+    "Check Mode"?: "Contains" | "Equals";
+  }) => void;
   function AttackIsCrit(): (tags: {}) => void;
   function ContainerHas(arg1: Location, ...arg2): (tags: {}) => void;
   function BlockEquals(arg1: Location): (tags: {}) => void;
@@ -1360,6 +1415,9 @@ declare namespace IfEntity {
   function HasCustomTag(arg1: String, arg2: Number | null, arg3: String | null): (tags: {}) => void;
   function IsSheared(): (tags: {}) => void;
   function IsItem(): (tags: {}) => void;
+  function IsRiding(arg1: (String | null)[], arg2: (StyledText | null)[]): (tags: {
+    "Ignore Formatting"?: "True" | "False";
+  }) => void;
   function Exists(): (tags: {}) => void;
   function IsNear(arg1: Location[], arg2: Number | null): (tags: {
     "Shape"?: "Sphere" | "Circle" | "Cube" | "Square";
@@ -1371,6 +1429,7 @@ declare namespace IfEntity {
   function NameEquals(arg1: String[], arg2: StyledText[]): (tags: {
     "Ignore Formatting"?: "True" | "False";
   }) => void;
+  function StandingOn(arg1: Location[]): (tags: {}) => void;
 }
 declare namespace IfPlayer {
   function IsLookingAt(arg1: Location[], arg2: Number | null): (tags: {
@@ -1397,6 +1456,7 @@ declare namespace IfPlayer {
   function IsNear(arg1: Location[], arg2: Number | null): (tags: {
     "Shape"?: "Sphere" | "Circle" | "Cube" | "Square";
   }) => void;
+  function StandingOn(arg1: Location[]): (tags: {}) => void;
   function IsGrounded(): (tags: {}) => void;
   function CursorItem(...arg1): (tags: {}) => void;
   function SlotEquals(arg1: Number): (tags: {}) => void;
@@ -1407,6 +1467,9 @@ declare namespace IfPlayer {
   function IsBlocking(): (tags: {}) => void;
   function HasPermission(): (tags: {
     "Permission"?: "Owner" | "Developer" | "Builder" | "Developer or builder" | "Whitelisted";
+  }) => void;
+  function IsRiding(arg1: (String | null)[], arg2: (StyledText | null)[]): (tags: {
+    "Ignore Formatting"?: "True" | "False";
   }) => void;
   function MainHandEquals(): (tags: {
     "Main Hand"?: "Left Hand" | "Right Hand";

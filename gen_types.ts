@@ -175,6 +175,7 @@ for (const [key, value] of Object.entries(namespaces)) {
             b.icon.name !== ""
         )
         .map((action) => {
+          action.name = action.name.replace(/ /g, "")
           const finalReturnType = t.tsTypeAnnotation(
             action.icon.returnValues?.length &&
               typeMappings[action.icon.returnValues[0].type]
