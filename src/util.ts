@@ -297,9 +297,12 @@ export function isBooleanContext(
 export function withType(
   t: typeof BabelTypes,
   node: BabelTypes.Node,
-  type: BabelTypes.TSType
+  type: BabelTypes.TSType,
+  optional: boolean | null = null
 ): BabelTypes.Node {
   // @ts-ignore
   node.typeAnnotation = t.tsTypeAnnotation(type)
+  // @ts-ignore
+  if (optional != null) node.optional = optional
   return node
 }

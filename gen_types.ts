@@ -169,10 +169,22 @@ for (const [key, value] of Object.entries(namespaces)) {
         .filter(
           (b) =>
             b.codeblockName === value &&
-            !bannedSubstrings.some((ban) => b.name.includes(ban))
+            !bannedSubstrings.some((ban) => b.name.includes(ban)) &&
+            b.icon.name !== ""
         )
-        .map((action) =>
-          t.tsDeclareFunction(
+        .map((action) => {
+          const finalReturnType = t.tsTypeAnnotation(
+            action.icon.returnValues?.length &&
+              typeMappings[action.icon.returnValues[0].type]
+              ? t.tsTypeReference(
+                  t.identifier(typeMappings[action.icon.returnValues[0].type])
+                )
+              : value === "REPEAT"
+              ? t.tsBooleanKeyword()
+              : t.tsVoidKeyword()
+          )
+
+          return t.tsDeclareFunction(
             t.identifier(action.name),
             null,
             [
@@ -194,17 +206,33 @@ for (const [key, value] of Object.entries(namespaces)) {
                 }) ?? []),
             ],
             t.tsTypeAnnotation(
-              action.icon.returnValues?.length &&
-                typeMappings[action.icon.returnValues[0].type]
-                ? t.tsTypeReference(
-                    t.identifier(typeMappings[action.icon.returnValues[0].type])
-                  )
-                : value === "REPEAT"
-                ? t.tsBooleanKeyword()
-                : t.tsVoidKeyword()
+              t.tsFunctionType(
+                null,
+                [
+                  withType(
+                    t,
+                    t.identifier("tags"),
+                    t.tsTypeLiteral(
+                      action.tags.map((tag) =>
+                        withType(
+                          t,
+                          t.tsPropertySignature(t.stringLiteral(tag.name)),
+                          t.tsUnionType(
+                            tag.options.map((option) =>
+                              t.tsLiteralType(t.stringLiteral(option.name))
+                            )
+                          ),
+                          true
+                        )
+                      )
+                    )
+                  ) as t.Identifier,
+                ],
+                finalReturnType
+              )
             )
           )
-        )
+        })
     )
   )
 
