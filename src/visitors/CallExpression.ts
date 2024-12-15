@@ -8,7 +8,7 @@ import {
   getLineVar,
   flags,
   isBooleanContext,
-  parseObjectExpression,
+  ValidLiteral,
 } from "../util.js"
 import { NodePath, VisitNode, Visitor } from "@babel/traverse"
 import { PluginOptions } from "@babel/core"
@@ -25,7 +25,15 @@ export default (
       const { callee, arguments: args } = path.node
       if (t.isCallExpression(callee)) {
         // @ts-ignore
-        callee.tags = args[0]
+        callee.tags = (
+          args[0] as BabelTypes.ObjectExpression
+        ).properties.reduce((acc: Record<string, any>, prop) => {
+          acc[
+            ((prop as BabelTypes.ObjectProperty).key as ValidLiteral)
+              .value as string
+          ] = ((prop as BabelTypes.ObjectProperty).value as ValidLiteral).value
+          return acc
+        }, {})
         path.replaceWith(callee)
       }
     },
