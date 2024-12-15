@@ -10458,7 +10458,7 @@
     }
   },
   {
-    "name": "L SetHealth",
+    "name": "SetHealth",
     "codeblockName": "PLAYER ACTION",
     "tags": [
       {
@@ -55830,7 +55830,7 @@
     }
   },
   {
-    "name": "L SetArmor",
+    "name": "SetArmor",
     "codeblockName": "ENTITY ACTION",
     "tags": [],
     "aliases": [],
@@ -61354,7 +61354,7 @@
     }
   },
   {
-    "name": "L PFX Spiral",
+    "name": "PFX Spiral",
     "codeblockName": "GAME ACTION",
     "tags": [],
     "aliases": [],

@@ -12,9 +12,8 @@ To use, make a new project and run:
 git clone https://github.com/Wonkers0/DFJS.git
 cd ./DFJS
 bun i
-mkdir code
-touch ./code/main.dfjs
-# Write your code in main.dfjs...
+touch ./code/main.df.ts
+# Write your code in main.df.ts...
 bun transpile
 ```
 
