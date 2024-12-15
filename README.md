@@ -7,10 +7,14 @@ This is a babel plugin for compiling javascript code to a DF template.
 There is some special syntax, as it uses type annotations to specify variable scope.
 
 To use, make a new project and run:
+
 ```sh
 git clone https://github.com/Wonkers0/DFJS.git
 cd ./DFJS
 bun i
+mkdir code
+touch ./code/main.dfjs
+# Write your code in main.dfjs...
 bun transpile
 ```
 
@@ -19,7 +23,6 @@ Example:
 ```javascript
 function Join(): PlayerEvent {
   const exampleVariable: Game = "hello"
-  
 }
 ```
 
@@ -65,10 +68,13 @@ function Join(): PlayerEvent {
   ]
 }
 ```
+
 ## Contributing
+
 Source code is in the `src` directory
 
 Make sure you use the `--debug` flag:
+
 ```sh
 bun transpile --debug
 ```
