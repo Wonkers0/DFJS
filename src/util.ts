@@ -110,6 +110,7 @@ export function getTempName() {
 const blockNameMappings = {
   "IF VARIABLE": "if_var",
   "SET VARIABLE": "set_var",
+  "SELECT OBJECT": "select_obj",
 }
 
 export function getBlockTags(
@@ -171,7 +172,7 @@ export function getBlockObject(
     ...Object.entries(customAttributes).map(([key, value]) =>
       t.objectProperty(t.stringLiteral(key), value)
     ),
-  ])
+  ]) as BabelTypes.ObjectExpression
 }
 
 export function getBracketObject(

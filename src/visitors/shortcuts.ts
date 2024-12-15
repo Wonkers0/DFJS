@@ -51,12 +51,18 @@ export default {
       ),
     ]),
   ],
+  "SelectObject.Default": (t) => EventTarget(t, "Default"),
+  "SelectObject.Killer": (t) => EventTarget(t, "Killer"),
+  "SelectObject.Damager": (t) => EventTarget(t, "Damager"),
+  "SelectObject.Victim": (t) => EventTarget(t, "Victim"),
+  "SelectObject.Shooter": (t) => EventTarget(t, "Shooter"),
+  "SelectObject.Projectile": (t) => EventTarget(t, "Projectile"),
 } as {
   [key: string]: (
     t: typeof BabelTypes,
     tempVar: string,
     args: BabelTypes.Expression[]
-  ) => BabelTypes.ObjectExpression[]
+  ) => BabelTypes.ObjectExpression[] | [BabelTypes.ObjectExpression[], boolean]
 }
 
 function round(
@@ -83,4 +89,25 @@ function round(
       { "Round Mode": tag }
     ),
   ]
+}
+
+function EventTarget(
+  t: typeof BabelTypes,
+  target: "Default" | "Killer" | "Damager" | "Victim" | "Shooter" | "Projectile"
+) {
+  return [
+    [
+      getBlockObject(
+        t,
+        "select_obj",
+        "EventTarget",
+        [],
+        {},
+        {
+          "Event Target": target,
+        }
+      ),
+    ],
+    false,
+  ] as [BabelTypes.ObjectExpression[], boolean]
 }

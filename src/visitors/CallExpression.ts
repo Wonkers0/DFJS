@@ -6,7 +6,6 @@ import {
   getValueData,
   getTempName,
   getLineVar,
-  ValidLiteral,
   flags,
   isBooleanContext,
   parseObjectExpression,
@@ -16,7 +15,6 @@ import { PluginOptions } from "@babel/core"
 import { actionBlocks } from "../plugin"
 import shortcuts from "./shortcuts"
 import visitors from "../visitors.js"
-import generate from "@babel/generator"
 
 export default (
   t: typeof BabelTypes,
@@ -37,6 +35,7 @@ export default (
     exit(path) {
       if (flags.debug) console.log("CallExpression")
       const { callee } = path.node
+      const parsedCallee = parseCallee(t, callee as BabelTypes.Expression)
 
       if (
         t.isMemberExpression(callee) &&
@@ -48,7 +47,9 @@ export default (
           ).name
         )
       )
-        CodeAction(t, threadContents, path)
+        parsedCallee && shortcuts[parsedCallee] === undefined
+          ? CodeAction(t, threadContents, path)
+          : ShortcutActions(t, threadContents, path)
       else ShortcutActions(t, threadContents, path)
     },
   } as VisitNode<PluginOptions, BabelTypes.CallExpression>)
@@ -65,10 +66,20 @@ function ShortcutActions(
     throw new Error("Could not parse callee in CallExpression shortcut action")
 
   if (shortcuts[parsedCallee] !== undefined) {
+    const shortcut = shortcuts[parsedCallee](
+      t,
+      tempVar,
+      args as BabelTypes.Expression[]
+    ) as
+      | [BabelTypes.ObjectExpression[], boolean]
+      | BabelTypes.ObjectExpression[]
+
     threadContents.push(
-      ...shortcuts[parsedCallee](t, tempVar, args as BabelTypes.Expression[])
+      ...(Array.isArray(shortcut[0])
+        ? (shortcut[0] as BabelTypes.ObjectExpression[])
+        : (shortcut as BabelTypes.ObjectExpression[]))
     )
-    path.replaceWith(getLineVar(t, tempVar))
+    if (shortcut[1] !== false) path.replaceWith(getLineVar(t, tempVar))
   } else {
     const isDynamic =
       parsedCallee === "StartProcess" || parsedCallee === "CallFunction"

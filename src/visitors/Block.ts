@@ -1,5 +1,10 @@
 import * as BabelTypes from "@babel/types"
-import { flags, getBracketObject, getElseObject } from "../util.js"
+import {
+  flags,
+  getBlockObject,
+  getBracketObject,
+  getElseObject,
+} from "../util.js"
 import { VisitNode } from "@babel/traverse"
 import { PluginOptions } from "@babel/core"
 
@@ -24,5 +29,15 @@ export default (
         threadContents.push(getBracketObject(t, "norm", false))
       else if (path.findParent((p) => p.isLoop()))
         threadContents.push(getBracketObject(t, "sticky", false))
+
+      const sibling = path.getPrevSibling().node
+      if (
+        t.isExpressionStatement(sibling) &&
+        t.isCallExpression(sibling.expression) &&
+        t.isMemberExpression(sibling.expression.callee) &&
+        t.isIdentifier(sibling.expression.callee.object) &&
+        sibling.expression.callee.object.name == "SelectObject"
+      )
+        threadContents.push(getBlockObject(t, "select_obj", "Reset"))
     },
   } as VisitNode<PluginOptions, BabelTypes.Block>)
