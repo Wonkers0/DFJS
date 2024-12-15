@@ -130,7 +130,7 @@ export function getBlockTags(
   if (!tags) return []
 
   return tags
-    .map((tag: any, i: number) =>
+    .map((tag: any) =>
       getArgObject(
         t,
         tag.slot,

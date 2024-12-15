@@ -108,7 +108,7 @@ const itemClassProperties = {
     ),
     "name?": t.tsTypeReference(t.identifier("StyledText")),
     "lore?": t.tsArrayType(t.tsTypeReference(t.identifier("StyledText"))),
-    "quantity?": t.tsNumberKeyword(),
+    "amount?": t.tsNumberKeyword(),
     "tags?": t.tsTypeLiteral([
       withType(
         t,
@@ -137,6 +137,8 @@ const itemClassProperties = {
         t.tsLiteralType(t.stringLiteral(sound.icon.name))
       )
     ),
+    "pitch?": t.tsNumberKeyword(),
+    "volume?": t.tsNumberKeyword(),
   },
 } as { [key: string]: { [key: string]: t.TSType } }
 

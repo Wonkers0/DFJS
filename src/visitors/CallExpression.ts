@@ -25,10 +25,7 @@ export default (
       const { callee, arguments: args } = path.node
       if (t.isCallExpression(callee)) {
         // @ts-ignore
-        callee.tags = parseObjectExpression(
-          t,
-          args[0] as BabelTypes.ObjectExpression
-        )
+        callee.tags = args[0]
         path.replaceWith(callee)
       }
     },
