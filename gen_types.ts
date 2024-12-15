@@ -201,8 +201,14 @@ for (const [key, value] of Object.entries(namespaces)) {
                       ? t.tsUnionType([mainType, t.tsNullKeyword()])
                       : mainType
                   )
+                  if (arg.plural)
+                    identifier.typeAnnotation.typeAnnotation = t.tsArrayType(
+                      identifier.typeAnnotation.typeAnnotation
+                    )
 
-                  return identifier
+                  return arg.plural && i == action.icon.arguments.length - 1
+                    ? t.restElement(identifier)
+                    : identifier
                 }) ?? []),
             ],
             t.tsTypeAnnotation(

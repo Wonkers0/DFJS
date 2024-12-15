@@ -56,12 +56,12 @@ declare class Sound {
   });
 }
 declare namespace PlayerAction {
-  function SetHotbar(arg1: Item): (tags: {}) => void;
+  function SetHotbar(...arg1): (tags: {}) => void;
   function SetReducedDebug(): (tags: {
     "Reduced Debug Info Enabled"?: "True" | "False";
   }) => void;
   function CloseInv(): (tags: {}) => void;
-  function GiveItems(arg1: Item, arg2: Number | null): (tags: {}) => void;
+  function GiveItems(arg1: Item[], arg2: Number | null): (tags: {}) => void;
   function SetHandCrafting(): (tags: {
     "Allow Hand Crafting"?: "Enable" | "Disable";
   }) => void;
@@ -69,8 +69,8 @@ declare namespace PlayerAction {
   function SetVelocity(arg1: Vector): (tags: {
     "Add to Current Velocity"?: "True" | "False";
   }) => void;
-  function Particle(arg1: Particle, arg2: Location): (tags: {}) => void;
-  function AddInvRow(arg1: Item | null): (tags: {
+  function Particle(arg1: Particle[], arg2: Location): (tags: {}) => void;
+  function AddInvRow(...arg1): (tags: {
     "New Row Position"?: "Top row" | "Bottom row";
   }) => void;
   function DisplayLightning(arg1: Location): (tags: {}) => void;
@@ -78,8 +78,8 @@ declare namespace PlayerAction {
     "Ignore Formatting"?: "True" | "False";
   }) => void;
   function SetXPProg(arg1: Number): (tags: {}) => void;
-  function SetInventory(arg1: Item): (tags: {}) => void;
-  function TpSequence(arg1: Location, arg2: Number | null): (tags: {}) => void;
+  function SetInventory(...arg1): (tags: {}) => void;
+  function TpSequence(arg1: Location[], arg2: Number | null): (tags: {}) => void;
   function Heal(arg1: Number): (tags: {}) => void;
   function SetSpawnPoint(arg1: Location): (tags: {}) => void;
   function SetInventoryKept(): (tags: {
@@ -131,7 +131,7 @@ declare namespace PlayerAction {
     "Gliding"?: "Enable" | "Disable";
   }) => void;
   function SetRotation(arg1: Number, arg2: Number): (tags: {}) => void;
-  function ClearItems(arg1: Item): (tags: {}) => void;
+  function ClearItems(...arg1): (tags: {}) => void;
   function SetFlying(): (tags: {
     "Flying"?: "Enable" | "Disable";
   }) => void;
@@ -146,38 +146,38 @@ declare namespace PlayerAction {
     "Add to Current Velocity"?: "True" | "False";
     "Ignore Distance"?: "True" | "False";
   }) => void;
-  function SetArmor(arg1: Item): (tags: {}) => void;
+  function SetArmor(...arg1): (tags: {}) => void;
   function DisplayGateway(arg1: Location): (tags: {
     "Animation Type"?: "Initial beam" | "Periodic beam";
   }) => void;
   function GiveSaturation(arg1: Number): (tags: {}) => void;
-  function DisplayEquipment(arg1: String, arg2: StyledText, arg3: Item): (tags: {}) => void;
+  function DisplayEquipment(arg1: String, arg2: StyledText, arg3: Item[]): (tags: {}) => void;
   function GiveExp(arg1: Number): (tags: {
     "Give Experience"?: "Points" | "Levels" | "Level percentage";
   }) => void;
   function FaceLocation(arg1: Location): (tags: {}) => void;
   function ClearScoreboard(): (tags: {}) => void;
-  function ActionBar(arg1: StyledText): (tags: {
+  function ActionBar(...arg1): (tags: {
     "Text Value Merging"?: "Add spaces" | "No spaces";
     "Inherit Styles"?: "True" | "False";
   }) => void;
-  function SetChatTag(arg1: StyledText): (tags: {}) => void;
+  function SetChatTag(arg1: StyledText[]): (tags: {}) => void;
   function ShiftWorldBorder(arg1: Number, arg2: Number | null): (tags: {}) => void;
-  function DisplaySignText(arg1: Location, arg2: StyledText | null): (tags: {
+  function DisplaySignText(arg1: Location, ...arg2): (tags: {
     "Sign Side"?: "Front" | "Back";
     "Text Color"?: "White" | "Orange" | "Magenta" | "Light blue" | "Yellow" | "Lime" | "Pink" | "Gray" | "Light gray" | "Cyan" | "Purple" | "Blue" | "Brown" | "Green" | "Red" | "Black";
     "Glowing"?: "Enable" | "Disable";
   }) => void;
-  function ExpandInv(arg1: Item | null): (tags: {}) => void;
+  function ExpandInv(...arg1): (tags: {}) => void;
   function LaunchProj(arg1: Location | null, arg2: StyledText | null, arg3: Number | null, arg4: Number | null): (tags: {}) => void;
   function ParticleCuboidA(arg1: Particle, arg2: Location, arg3: Location, arg4: Number | null, arg5: Number | null): (tags: {
     "Fill Type"?: "Wireframe" | "Hollow" | "Solid";
   }) => void;
-  function PlaySound(arg1: Sound, arg2: Location | null): (tags: {
+  function PlaySound(arg1: Sound[], arg2: Location | null): (tags: {
     "Sound Source"?: "Master" | "Music" | "Jukebox/Note Blocks" | "Weather" | "Blocks" | "Hostile Creatures" | "Friendly Creatures" | "Players" | "Ambient/Environment" | "Voice/Speech";
   }) => void;
   function SetCompass(arg1: Location): (tags: {}) => void;
-  function RngTeleport(arg1: Location): (tags: {
+  function RngTeleport(...arg1): (tags: {
     "Keep Current Rotation"?: "True" | "False";
   }) => void;
   function MobDisguise(arg1: StyledText | null): (tags: {}) => void;
@@ -191,11 +191,11 @@ declare namespace PlayerAction {
     "Spawn Death Drops"?: "Enable" | "Disable";
   }) => void;
   function SendToPlot(arg1: String): (tags: {}) => void;
-  function RemovePotion(arg1: PotionEffect): (tags: {}) => void;
-  function DisplayFracture(arg1: Location, arg2: Number | null): (tags: {
+  function RemovePotion(...arg1): (tags: {}) => void;
+  function DisplayFracture(arg1: Location[], arg2: Number | null): (tags: {
     "Overwrite Previous Fracture"?: "True" | "False";
   }) => void;
-  function SetEntityHidden(arg1: String, arg2: StyledText): (tags: {
+  function SetEntityHidden(arg1: String[], arg2: StyledText[]): (tags: {
     "Hidden"?: "Enable" | "Disable";
     "Ignore Formatting"?: "True" | "False";
   }) => void;
@@ -208,7 +208,7 @@ declare namespace PlayerAction {
   function ParticleCuboid(arg1: Particle, arg2: Location, arg3: Location, arg4: Number | null): (tags: {
     "Fill Type"?: "Wireframe" | "Hollow" | "Solid";
   }) => void;
-  function SendMessageSeq(arg1: StyledText, arg2: Number | null): (tags: {
+  function SendMessageSeq(arg1: StyledText[], arg2: Number | null): (tags: {
     "Alignment Mode"?: "Regular" | "Centered";
   }) => void;
   function SetNamePrefix(arg1: StyledText | null): (tags: {
@@ -230,7 +230,7 @@ declare namespace PlayerAction {
     "Value Type"?: "Direct" | "Percentage (Base)" | "Percentage (Relative)";
   }) => void;
   function SetTickRate(arg1: Number | null): (tags: {}) => void;
-  function PlayEntitySound(arg1: Sound, arg2: String, arg3: StyledText): (tags: {
+  function PlayEntitySound(arg1: Sound[], arg2: String[], arg3: StyledText[]): (tags: {
     "Sound Source"?: "Master" | "Music" | "Jukebox/Note Blocks" | "Weather" | "Blocks" | "Hostile Creatures" | "Friendly Creatures" | "Players" | "Ambient/Environment" | "Voice/Speech";
     "Ignore Formatting"?: "True" | "False";
   }) => void;
@@ -265,7 +265,7 @@ declare namespace PlayerAction {
   function SpectatorMode(): (tags: {}) => void;
   function DispHeadTexture(arg1: Location, arg2: Item, arg3: String): (tags: {}) => void;
   function ClearPotions(): (tags: {}) => void;
-  function SetTabListInfo(arg1: StyledText | null): (tags: {
+  function SetTabListInfo(...arg1): (tags: {
     "Player List Field"?: "Header" | "Footer";
     "Text Value Merging"?: "Add spaces" | "No spaces";
     "Inherit Styles"?: "True" | "False";
@@ -286,7 +286,7 @@ declare namespace PlayerAction {
   function SetExhaustion(arg1: Number): (tags: {}) => void;
   function ParticleCircle(arg1: Particle, arg2: Location, arg3: Number | null): (tags: {}) => void;
   function DisplayBlock(arg1: Location, arg2: Location | null): (tags: {}) => void;
-  function RideEntity(arg1: String, arg2: StyledText): (tags: {
+  function RideEntity(arg1: String[], arg2: StyledText[]): (tags: {
     "Ignore Formatting"?: "True" | "False";
   }) => void;
   function RmWorldBorder(): (tags: {}) => void;
@@ -307,14 +307,14 @@ declare namespace PlayerAction {
   }) => void;
   function SetArrowsStuck(arg1: Number | null): (tags: {}) => void;
   function GetItemCooldown(arg1: Variable, arg2: Item): (tags: {}) => Number;
-  function ReplaceItems(arg1: Item | null, arg2: Item, arg3: Number | null): (tags: {}) => void;
-  function SendMessage(arg1: StyledText | null): (tags: {
+  function ReplaceItems(arg1: (Item | null)[], arg2: Item, arg3: Number | null): (tags: {}) => void;
+  function SendMessage(...arg1): (tags: {
     "Alignment Mode"?: "Regular" | "Centered";
     "Text Value Merging"?: "Add spaces" | "No spaces";
     "Inherit Styles"?: "True" | "False";
   }) => void;
   function SetSlotItem(arg1: Item | null, arg2: Number): (tags: {}) => void;
-  function PlaySoundSeq(arg1: Sound, arg2: Number | null, arg3: Location | null): (tags: {
+  function PlaySoundSeq(arg1: Sound[], arg2: Number | null, arg3: Location | null): (tags: {
     "Sound Source"?: "Master" | "Music" | "Jukebox/Note Blocks" | "Weather" | "Blocks" | "Hostile Creatures" | "Friendly Creatures" | "Players" | "Ambient/Environment" | "Voice/Speech";
   }) => void;
   function ParticleLineA(arg1: Particle, arg2: Location, arg3: Location, arg4: Number | null, arg5: Number | null): (tags: {}) => void;
@@ -333,12 +333,12 @@ declare namespace PlayerAction {
   function SetWorldBorder(arg1: Location, arg2: Number, arg3: Number | null): (tags: {}) => void;
   function SetPlayerTime(arg1: Number): (tags: {}) => void;
   function GiveFood(arg1: Number): (tags: {}) => void;
-  function GivePotion(arg1: PotionEffect): (tags: {
+  function GivePotion(...arg1): (tags: {
     "Show Icon"?: "True" | "False";
     "Overwrite Effect"?: "True" | "False";
     "Effect Particles"?: "Regular" | "Ambient" | "None";
   }) => void;
-  function RemoveItems(arg1: Item): (tags: {}) => void;
+  function RemoveItems(...arg1): (tags: {}) => void;
   function BoostElytra(arg1: Item): (tags: {}) => void;
   function SaveInv(): (tags: {}) => void;
   function OpenBook(arg1: Item): (tags: {}) => void;
@@ -359,7 +359,7 @@ declare namespace PlayerAction {
     "Animation Arm"?: "Swing main arm" | "Swing off arm";
   }) => void;
   function DisplayHologram(arg1: Location, arg2: StyledText): (tags: {}) => void;
-  function ShowInv(arg1: Item | null): (tags: {}) => void;
+  function ShowInv(...arg1): (tags: {}) => void;
   function SetFoodLevel(arg1: Number): (tags: {}) => void;
   function PlayerDisguise(arg1: StyledText, arg2: Item | null): (tags: {}) => void;
   function SetSaturation(arg1: Number): (tags: {}) => void;
@@ -367,7 +367,7 @@ declare namespace PlayerAction {
   function ScoreDefFormat(arg1: StyledText): (tags: {
     "Number Format"?: "Fixed" | "Styled" | "Blank" | "Reset";
   }) => void;
-  function StopSound(arg1: Sound | null): (tags: {
+  function StopSound(...arg1): (tags: {
     "Sound Source"?: "Master" | "Music" | "Jukebox/Note Blocks" | "Weather" | "Blocks" | "Hostile Creatures" | "Friendly Creatures" | "Players" | "Ambient/Environment" | "Voice/Speech";
   }) => void;
   function HealthAttribute(arg1: Number | null): (tags: {
@@ -385,7 +385,7 @@ declare namespace SetVariable {
   }) => void;
   function SetParticleType(arg1: Variable, arg2: Particle | null, arg3: String): (tags: {}) => void;
   function ClearItemTag(arg1: Variable, arg2: Item | null): (tags: {}) => void;
-  function PurgeVars(arg1: String): (tags: {
+  function PurgeVars(...arg1): (tags: {
     "Match Requirement"?: "Entire name" | "Full word(s) in name" | "Any part of name";
     "Ignore Case"?: "True" | "False";
   }) => void;
@@ -423,7 +423,7 @@ declare namespace SetVariable {
     "Operation"?: "Add number" | "Add percentage to base" | "Multiply modifier by percentage";
     "Active Equipment Slot"?: "Any" | "Main hand" | "Off hand" | "Head" | "Body" | "Legs" | "Feet";
   }) => void;
-  function GetCenterLoc(arg1: Variable, arg2: Location): (tags: {}) => Location;
+  function GetCenterLoc(arg1: Variable, ...arg2): (tags: {}) => Location;
   function AlignLoc(arg1: Variable, arg2: Location | null): (tags: {
     "Alignment Mode"?: "Block center" | "Lower block corner";
     "Coordinates"?: "All coordinates" | "X and Z" | "Only Y";
@@ -446,7 +446,7 @@ declare namespace SetVariable {
   }) => void;
   function GetParticleMotion(arg1: Variable, arg2: Particle): (tags: {}) => Vector;
   function SetParticleMotion(arg1: Variable, arg2: Particle | null, arg3: Vector | null, arg4: Number | null): (tags: {}) => void;
-  function Average(arg1: Variable, arg2: Number): (tags: {}) => Number;
+  function Average(arg1: Variable, ...arg2): (tags: {}) => Number;
   function SetMapTexture(arg1: Variable, arg2: Item | null, arg3: String): (tags: {}) => void;
   function GetBlockData(arg1: Variable, arg2: Location, arg3: String): (tags: {}) => String;
   function SortDict(arg1: Variable): (tags: {
@@ -456,7 +456,7 @@ declare namespace SetVariable {
   function GetLecternBook(arg1: Variable, arg2: Location): (tags: {}) => Item;
   function GetCustomSound(arg1: Variable, arg2: Sound): (tags: {}) => String;
   function CrossProduct(arg1: Variable, arg2: Vector, arg3: Vector): (tags: {}) => Vector;
-  function x(arg1: Variable, arg2: Number): (tags: {}) => Number;
+  function x(arg1: Variable, ...arg2): (tags: {}) => Number;
   function GetParticleRoll(arg1: Variable, arg2: Particle | null): (tags: {}) => Number;
   function DotProduct(arg1: Variable, arg2: Vector, arg3: Vector): (tags: {}) => Number;
   function SetArmorTrim(arg1: Variable, arg2: Item | null): (tags: {
@@ -469,7 +469,7 @@ declare namespace SetVariable {
     "Return Type"?: "Simplex" | "Perlin" | "Voronoi" | "Worley" | "Value";
     "Dimensions"?: "3D" | "2D";
   }) => Number;
-  function MinNumber(arg1: Variable, arg2: Number): (tags: {}) => Number;
+  function MinNumber(arg1: Variable, ...arg2): (tags: {}) => Number;
   function GetPotionType(arg1: Variable, arg2: PotionEffect): (tags: {}) => String;
   function ListLength(arg1: Variable): (tags: {}) => Number;
   function Sine(arg1: Variable, arg2: Number): (tags: {
@@ -511,7 +511,7 @@ declare namespace SetVariable {
   function RGBColor(arg1: Variable, arg2: Number, arg3: Number, arg4: Number): (tags: {}) => void;
   function SetCanDestroy(arg1: Variable, arg2: Item | null): (tags: {}) => void;
   function HSLColor(arg1: Variable, arg2: Number, arg3: Number | null, arg4: Number | null): (tags: {}) => void;
-  function RemoveListIndex(arg1: Variable, arg2: Number): (tags: {}) => void;
+  function RemoveListIndex(arg1: Variable, ...arg2): (tags: {}) => void;
   function CellularNoise(arg1: Variable, arg2: Location, arg3: Number | null, arg4: Number | null, arg5: Number | null, arg6: Number | null, arg7: Number | null, arg8: Number | null, arg9: Number | null, arg10: Number | null, arg11: Number | null, arg12: Number | null, arg13: Number | null): (tags: {
     "Return Type"?: "Voronoi" | "Worley" | "Secondary" | "Additive" | "Subtractive" | "Divisive" | "Multiplicative" | "Origin";
     "Distance Calculation"?: "Euclidean" | "Manhattan" | "Natural";
@@ -555,7 +555,7 @@ declare namespace SetVariable {
   function GetParticleAmount(arg1: Variable, arg2: Particle): (tags: {}) => Number;
   function GetDictSize(arg1: Variable): (tags: {}) => Number;
   function SetItemAmount(arg1: Variable, arg2: Item | null, arg3: Number): (tags: {}) => void;
-  function SubtractVectors(arg1: Variable, arg2: Vector): (tags: {}) => Vector;
+  function SubtractVectors(arg1: Variable, ...arg2): (tags: {}) => Vector;
   function SetCase(arg1: Variable, arg2: String | null): (tags: {
     "Capitalization Type"?: "UPPERCASE" | "lowercase" | "Proper Case" | "iNVERT CASE" | "RAnDoM cASe";
   }) => String;
@@ -581,13 +581,13 @@ declare namespace SetVariable {
   function GetLoreLine(arg1: Variable, arg2: Item, arg3: Number): (tags: {}) => StyledText;
   function GetParticleType(arg1: Variable, arg2: Particle): (tags: {}) => String;
   function SetItemMaxDura(arg1: Variable, arg2: Item | null, arg3: Number): (tags: {}) => void;
-  function RemoveString(arg1: Variable, arg2: String | null, arg3: String): (tags: {
+  function RemoveString(arg1: Variable, arg2: String | null, ...arg3): (tags: {
     "Regular Expressions"?: "Enable" | "Disable";
   }) => String;
   function GetAllBlockData(arg1: Variable, arg2: Location): (tags: {
     "Hide Default"?: "True" | "False";
   }) => String;
-  function MaxNumber(arg1: Variable, arg2: Number): (tags: {}) => Number;
+  function MaxNumber(arg1: Variable, ...arg2): (tags: {}) => Number;
   function GetDictKeys(arg1: Variable): (tags: {}) => void;
   function TrimStyledText(arg1: Variable, arg2: StyledText | null, arg3: Number, arg4: Number | null): (tags: {}) => StyledText;
   function SetParticleMat(arg1: Variable, arg2: Particle | null, arg3: Item): (tags: {}) => void;
@@ -613,7 +613,7 @@ declare namespace SetVariable {
     "Color Channels"?: "RGB" | "HSB" | "HSL";
   }) => void;
   function SetListValue(arg1: Variable, arg2: Number): (tags: {}) => void;
-  function SetBookText(arg1: Variable, arg2: Item | null, arg3: StyledText, arg4: StyledText, arg5: Number): (tags: {}) => void;
+  function SetBookText(arg1: Variable, arg2: Item | null, arg3: StyledText[], arg4: StyledText, arg5: Number): (tags: {}) => void;
   function RandomValue(arg1: Variable): (tags: {}) => void;
   function SetItemType(arg1: Variable, arg2: Item | null, arg3: String): (tags: {}) => void;
   function GetSoundType(arg1: Variable, arg2: Sound): (tags: {}) => String;
@@ -636,7 +636,7 @@ declare namespace SetVariable {
     "Coordinate Type"?: "Plot coordinate" | "World coordinate";
     "Coordinate"?: "X" | "Y" | "Z" | "Pitch" | "Yaw";
   }) => void;
-  function AddVectors(arg1: Variable, arg2: Vector): (tags: {}) => Vector;
+  function AddVectors(arg1: Variable, ...arg2): (tags: {}) => Vector;
   function GetParticleFade(arg1: Variable, arg2: Particle): (tags: {}) => String;
   function SetItemTool(arg1: Variable, arg2: Item | null, arg3: Number | null, arg4: Number | null): (tags: {}) => void;
   function SetHeadTexture(arg1: Variable, arg2: Item | null, arg3: String): (tags: {}) => void;
@@ -666,7 +666,7 @@ declare namespace SetVariable {
     "Inherit Styles"?: "True" | "False";
   }) => void;
   function GetMiniMessageExpr(arg1: Variable, arg2: StyledText): (tags: {}) => String;
-  function SetItemEffects(arg1: Variable, arg2: Item | null, arg3: PotionEffect): (tags: {}) => void;
+  function SetItemEffects(arg1: Variable, arg2: Item | null, ...arg3): (tags: {}) => void;
   function GetItemTag(arg1: Variable, arg2: Item, arg3: String): (tags: {}) => void;
   function CreateList(arg1: Variable): (tags: {}) => void;
   function AppendList(arg1: Variable): (tags: {}) => void;
@@ -703,7 +703,7 @@ declare namespace SetVariable {
     "Search Order"?: "Ascending (first index)" | "Descending (last index)";
   }) => Number;
   function RemItemEnchant(arg1: Variable, arg2: Item | null, arg3: String): (tags: {}) => void;
-  function AddItemLore(arg1: Variable, arg2: Item | null, arg3: StyledText): (tags: {}) => void;
+  function AddItemLore(arg1: Variable, arg2: Item | null, ...arg3): (tags: {}) => void;
   function SetParticleRoll(arg1: Variable, arg2: Particle | null, arg3: Number): (tags: {}) => void;
   function SetSoundVariant(arg1: Variable, arg2: Sound | null, arg3: String | null): (tags: {}) => void;
   function RandomizeList(arg1: Variable): (tags: {}) => void;
@@ -844,7 +844,7 @@ declare namespace EntityAction {
     "Add to Current Velocity"?: "True" | "False";
     "Ignore Distance"?: "True" | "False";
   }) => void;
-  function SetArmor(arg1: Item): (tags: {}) => void;
+  function SetArmor(...arg1): (tags: {}) => void;
   function GetCustomTag(arg1: Variable, arg2: String): (tags: {}) => void;
   function InteractionSize(arg1: Number | null, arg2: Number | null): (tags: {}) => void;
   function FaceLocation(arg1: Location): (tags: {
@@ -886,7 +886,7 @@ declare namespace EntityAction {
   function AttachLead(arg1: String, arg2: StyledText, arg3: Location): (tags: {
     "Ignore Formatting"?: "True" | "False";
   }) => void;
-  function RemovePotion(arg1: PotionEffect): (tags: {}) => void;
+  function RemovePotion(...arg1): (tags: {}) => void;
   function ShearSheep(): (tags: {}) => void;
   function ArmorStandSlots(): (tags: {
     "Interactions"?: "Take, swap or place item" | "Take or swap item" | "Take item" | "Place item" | "None";
@@ -978,7 +978,7 @@ declare namespace EntityAction {
     "Arms"?: "Enable" | "Disable" | "Don't change";
     "Base Plate"?: "Enable" | "Disable" | "Don't change";
   }) => void;
-  function SetTarget(arg1: String, arg2: StyledText): (tags: {
+  function SetTarget(arg1: String[], arg2: StyledText[]): (tags: {
     "Ignore Formatting"?: "True" | "False";
   }) => void;
   function TDisplayShadow(): (tags: {
@@ -1009,7 +1009,7 @@ declare namespace EntityAction {
     "Hand"?: "Main Hand" | "Off Hand";
     "Use Item"?: "Enable" | "Disable";
   }) => void;
-  function RideEntity(arg1: String, arg2: StyledText): (tags: {
+  function RideEntity(arg1: String[], arg2: StyledText[]): (tags: {
     "Ignore Formatting"?: "True" | "False";
   }) => void;
   function DisplayMatrix(): (tags: {}) => void;
@@ -1053,7 +1053,7 @@ declare namespace EntityAction {
   function SetCatResting(): (tags: {
     "Resting"?: "Enable" | "Disable";
   }) => void;
-  function GivePotion(arg1: PotionEffect): (tags: {
+  function GivePotion(...arg1): (tags: {
     "Overwrite Effect"?: "True" | "False";
     "Effect Particles"?: "Regular" | "Ambient" | "None";
   }) => void;
@@ -1109,7 +1109,7 @@ declare namespace EntityAction {
   function SetCelebrating(): (tags: {
     "Celebrate"?: "Enable" | "Disable";
   }) => void;
-  function TDisplayText(arg1: StyledText): (tags: {
+  function TDisplayText(...arg1): (tags: {
     "Text Value Merging"?: "Add spaces" | "No spaces";
     "Inherit Styles"?: "True" | "False";
   }) => void;
@@ -1130,12 +1130,12 @@ declare namespace IfVariable {
   function ItemIsBlock(arg1: Item): (tags: {}) => void;
   function DictValueEquals(arg1: String): (tags: {}) => void;
   function ItemHasTag(arg1: Item, arg2: String, arg3: Number | null, arg4: String | null): (tags: {}) => void;
-  function StringMatches(arg1: String, arg2: String): (tags: {
+  function StringMatches(arg1: String, ...arg2): (tags: {
     "Regular Expressions"?: "Enable" | "Disable";
     "Ignore Case"?: "True" | "False";
   }) => void;
   function ListIsEmpty(): (tags: {}) => void;
-  function StartsWith(arg1: String, arg2: String): (tags: {
+  function StartsWith(arg1: String, ...arg2): (tags: {
     "Ignore Case"?: "True" | "False";
   }) => void;
   function ListValueEq(arg1: Number): (tags: {}) => void;
@@ -1144,19 +1144,19 @@ declare namespace IfVariable {
   }) => void;
   function VarExists(arg1: Variable): (tags: {}) => void;
   function BlockIsSolid(): (tags: {}) => void;
-  function ItemEquals(arg1: Item, arg2: Item | null): (tags: {
+  function ItemEquals(arg1: Item, ...arg2): (tags: {
     "Comparison Mode"?: "Exactly equals" | "Ignore stack size" | "Ignore durability and stack size" | "Material only";
   }) => void;
   function ListContains(): (tags: {
     "Check Mode"?: "Has Any Value" | "Has All Values";
   }) => void;
-  function LocIsNear(arg1: Location, arg2: Location, arg3: Number): (tags: {
+  function LocIsNear(arg1: Location, arg2: Location[], arg3: Number): (tags: {
     "Shape"?: "Sphere" | "Circle" | "Cube" | "Square";
   }) => void;
-  function Contains(arg1: String, arg2: String): (tags: {
+  function Contains(arg1: String, ...arg2): (tags: {
     "Ignore Case"?: "True" | "False";
   }) => void;
-  function EndsWith(arg1: String, arg2: String): (tags: {
+  function EndsWith(arg1: String, ...arg2): (tags: {
     "Ignore Case"?: "True" | "False";
   }) => void;
   function DictHasKey(arg1: String): (tags: {}) => void;
@@ -1173,11 +1173,11 @@ declare namespace Control {
 declare namespace SelectObject {
   function RandomPlayer(arg1: Number | null): (tags: {}) => void;
   function LastEntity(): (tags: {}) => void;
-  function EntityName(arg1: String, arg2: StyledText): (tags: {
+  function EntityName(arg1: String[], arg2: StyledText[]): (tags: {
     "Ignore Formatting"?: "True" | "False";
   }) => void;
   function FilterRandom(arg1: Number | null): (tags: {}) => void;
-  function PlayerName(arg1: String): (tags: {}) => void;
+  function PlayerName(...arg1): (tags: {}) => void;
   function AllEntities(): (tags: {}) => void;
   function FilterDistance(arg1: Location, arg2: Number | null): (tags: {
     "Ignore Y-Axis"?: "True" | "False";
@@ -1205,7 +1205,7 @@ declare namespace Repeat {
     "Include Origin Block"?: "True" | "False";
     "Pattern"?: "Cardinal (4 blocks)" | "Square (8 blocks)" | "Adjacent (6 blocks)" | "Cube (26 blocks)";
   }) => boolean;
-  function Path(arg1: Variable, arg2: Location, arg3: Number | null): (tags: {
+  function Path(arg1: Variable, arg2: Location[], arg3: Number | null): (tags: {
     "Rotate Location"?: "True" | "False";
   }) => boolean;
   function Multiple(arg1: Variable | null, arg2: Number): (tags: {}) => boolean;
@@ -1221,8 +1221,8 @@ declare namespace Repeat {
   function ForEachEntry(arg1: Variable, arg2: Variable): (tags: {}) => boolean;
 }
 declare namespace GameAction {
-  function FillContainer(arg1: Location, arg2: Item): (tags: {}) => void;
-  function BreakBlock(arg1: Location): (tags: {}) => void;
+  function FillContainer(arg1: Location, ...arg2): (tags: {}) => void;
+  function BreakBlock(...arg1): (tags: {}) => void;
   function ChangeSign(arg1: Location, arg2: Number, arg3: StyledText | null): (tags: {
     "Sign Side"?: "Front" | "Back";
   }) => void;
@@ -1231,7 +1231,7 @@ declare namespace GameAction {
     "Content Type"?: "text/plain" | "application/json";
   }) => void;
   function WriteTransaction(arg1: Location, arg2: Location): (tags: {}) => void;
-  function SetBlockData(arg1: Location): (tags: {
+  function SetBlockData(arg1: Location[]): (tags: {
     "Overwrite Existing Data"?: "True" | "False";
   }) => void;
   function Firework(arg1: Item, arg2: Location): (tags: {
@@ -1239,7 +1239,7 @@ declare namespace GameAction {
     "Movement"?: "Upwards" | "Directional";
   }) => void;
   function SetEventDamage(arg1: Number): (tags: {}) => void;
-  function SpawnItem(arg1: Item, arg2: Location, arg3: StyledText | null): (tags: {
+  function SpawnItem(arg1: Item[], arg2: Location, arg3: StyledText | null): (tags: {
     "Apply Item Motion"?: "True" | "False";
   }) => void;
   function SignColor(arg1: Location): (tags: {
@@ -1248,7 +1248,7 @@ declare namespace GameAction {
     "Glowing"?: "Enable" | "Disable";
   }) => void;
   function ShulkerBullet(arg1: Location): (tags: {}) => void;
-  function SetContainer(arg1: Location, arg2: Item): (tags: {}) => void;
+  function SetContainer(arg1: Location, ...arg2): (tags: {}) => void;
   function SpawnInteraction(arg1: Location, arg2: Number | null, arg3: Number | null): (tags: {
     "Responsive"?: "Enable" | "Disable";
   }) => void;
@@ -1259,7 +1259,7 @@ declare namespace GameAction {
   }) => void;
   function UncancelEvent(): (tags: {}) => void;
   function SetLecternBook(arg1: Location, arg2: Item | null, arg3: Number | null): (tags: {}) => void;
-  function SpawnArmorStand(arg1: Location, arg2: StyledText | null, arg3: Item | null): (tags: {
+  function SpawnArmorStand(arg1: Location, arg2: StyledText | null, ...arg3): (tags: {
     "Visibility"?: "Visible" | "Visible (No hitbox)" | "Invisible" | "Invisible (No hitbox)";
   }) => void;
   function SpawnBlockDisp(arg1: Location): (tags: {}) => void;
@@ -1270,10 +1270,10 @@ declare namespace GameAction {
   function SetEventXP(arg1: Number): (tags: {}) => void;
   function LockContainer(arg1: Location, arg2: String | null): (tags: {}) => void;
   function SetExhaustion(arg1: Number): (tags: {}) => void;
-  function ClearItems(arg1: Location, arg2: Item): (tags: {}) => void;
+  function ClearItems(arg1: Location, ...arg2): (tags: {}) => void;
   function SetFurnaceSpeed(arg1: Location, arg2: Number): (tags: {}) => void;
   function BlockDropsOn(): (tags: {}) => void;
-  function BoneMeal(arg1: Location, arg2: Number | null): (tags: {
+  function BoneMeal(arg1: Location[], arg2: Number | null): (tags: {
     "Show Particles"?: "True" | "False";
   }) => void;
   function FallingBlock(arg1: Location): (tags: {
@@ -1281,16 +1281,16 @@ declare namespace GameAction {
     "Reform on Impact"?: "True" | "False";
   }) => void;
   function DiscordWebhook(arg1: String, arg2: String): (tags: {}) => void;
-  function TickBlock(arg1: Location, arg2: Number | null): (tags: {}) => void;
-  function ReplaceItems(arg1: Location, arg2: Item | null, arg3: Item, arg4: Number | null): (tags: {}) => void;
+  function TickBlock(arg1: Location[], arg2: Number | null): (tags: {}) => void;
+  function ReplaceItems(arg1: Location, arg2: (Item | null)[], arg3: Item, arg4: Number | null): (tags: {}) => void;
   function SetEventProj(): (tags: {}) => void;
   function Explosion(arg1: Location, arg2: Number | null): (tags: {}) => void;
-  function SpawnMob(arg1: Location, arg2: Number | null, arg3: StyledText | null, arg4: PotionEffect | null, arg5: Item | null): (tags: {}) => void;
+  function SpawnMob(arg1: Location, arg2: Number | null, arg3: StyledText | null, arg4: (PotionEffect | null)[], arg5: (Item | null)[]): (tags: {}) => void;
   function SetBrushableItem(arg1: Location, arg2: Item | null): (tags: {}) => void;
   function SpawnEnderEye(arg1: Location, arg2: Location | null, arg3: Number | null, arg4: StyledText | null): (tags: {
     "End of Lifespan"?: "Drop item" | "Shatter" | "Random";
   }) => void;
-  function SpawnPotionCloud(arg1: Location, arg2: PotionEffect | null, arg3: StyledText | null, arg4: Number | null, arg5: Number | null): (tags: {}) => void;
+  function SpawnPotionCloud(arg1: Location, arg2: (PotionEffect | null)[], arg3: StyledText | null, arg4: Number | null, arg5: Number | null): (tags: {}) => void;
   function LaunchProj(arg1: Location, arg2: StyledText | null, arg3: Number | null, arg4: Number | null): (tags: {}) => void;
   function SpawnItemDisp(arg1: Location, arg2: Item): (tags: {}) => void;
   function SetBlockGrowth(arg1: Location, arg2: Number | null): (tags: {
@@ -1298,7 +1298,7 @@ declare namespace GameAction {
   }) => void;
   function SetContainerName(arg1: Location, arg2: StyledText): (tags: {}) => void;
   function SetHead(arg1: Location, arg2: Item, arg3: String): (tags: {}) => void;
-  function RemoveItems(arg1: Location, arg2: Item): (tags: {}) => void;
+  function RemoveItems(arg1: Location, ...arg2): (tags: {}) => void;
   function SetRegion(arg1: Location, arg2: Location): (tags: {}) => void;
   function SpawnTNT(arg1: Location, arg2: Number | null, arg3: Number | null, arg4: StyledText | null): (tags: {}) => void;
   function SpawnExpOrb(arg1: Location, arg2: Number | null, arg3: StyledText | null): (tags: {}) => void;
@@ -1314,7 +1314,7 @@ declare namespace GameAction {
   function SetCampfireItem(arg1: Location, arg2: Item, arg3: Number | null): (tags: {
     "Campfire Slot"?: "1" | "2" | "3" | "4";
   }) => void;
-  function SpawnTextDisplay(arg1: Location, arg2: StyledText): (tags: {
+  function SpawnTextDisplay(arg1: Location, ...arg2): (tags: {
     "Text Value Merging"?: "Add spaces" | "No spaces";
     "Inherit Styles"?: "True" | "False";
   }) => void;
@@ -1327,23 +1327,23 @@ declare namespace IfGame {
     "Check Mode"?: "Has Room for Any Item" | "Has Room for All Items";
   }) => void;
   function EventBlockEquals(): (tags: {}) => void;
-  function CommandEquals(arg1: String): (tags: {
+  function CommandEquals(...arg1): (tags: {
     "Check Mode"?: "Check entire command" | "Check beginning";
     "Ignore Case"?: "True" | "False";
   }) => void;
-  function EventItemEquals(arg1: Item): (tags: {
+  function EventItemEquals(...arg1): (tags: {
     "Comparison Mode"?: "Exactly equals" | "Ignore stack size/durability" | "Material only";
   }) => void;
   function AttackIsCrit(): (tags: {}) => void;
-  function ContainerHas(arg1: Location, arg2: Item): (tags: {}) => void;
+  function ContainerHas(arg1: Location, ...arg2): (tags: {}) => void;
   function BlockEquals(arg1: Location): (tags: {}) => void;
   function InBlock(arg1: Location): (tags: {}) => void;
-  function BlockPowered(arg1: Location): (tags: {
+  function BlockPowered(...arg1): (tags: {
     "Redstone Power Mode"?: "Direct power" | "Indirect power";
   }) => void;
-  function HasPlayer(arg1: String): (tags: {}) => void;
-  function ContainerHasAll(arg1: Location, arg2: Item): (tags: {}) => void;
-  function CmdArgEquals(arg1: String, arg2: Number): (tags: {
+  function HasPlayer(...arg1): (tags: {}) => void;
+  function ContainerHasAll(arg1: Location, ...arg2): (tags: {}) => void;
+  function CmdArgEquals(arg1: String[], arg2: Number): (tags: {
     "Ignore Case"?: "True" | "False";
   }) => void;
   function EventCancelled(): (tags: {}) => void;
@@ -1359,19 +1359,19 @@ declare namespace IfEntity {
   function IsSheared(): (tags: {}) => void;
   function IsItem(): (tags: {}) => void;
   function Exists(): (tags: {}) => void;
-  function IsNear(arg1: Location, arg2: Number | null): (tags: {
+  function IsNear(arg1: Location[], arg2: Number | null): (tags: {
     "Shape"?: "Sphere" | "Circle" | "Cube" | "Square";
   }) => void;
-  function HasPotion(arg1: PotionEffect): (tags: {
+  function HasPotion(...arg1): (tags: {
     "Check Properties"?: "None" | "Amplifier" | "Duration" | "Amplifier and duration";
     "Check Mode"?: "Has any effect" | "Has all effects";
   }) => void;
-  function NameEquals(arg1: String, arg2: StyledText): (tags: {
+  function NameEquals(arg1: String[], arg2: StyledText[]): (tags: {
     "Ignore Formatting"?: "True" | "False";
   }) => void;
 }
 declare namespace IfPlayer {
-  function IsLookingAt(arg1: Location, arg2: Number | null): (tags: {
+  function IsLookingAt(arg1: Location[], arg2: Number | null): (tags: {
     "Fluid Mode"?: "Ignore fluids" | "Detect fluids";
   }) => void;
   function InWorldBorder(arg1: Location | null): (tags: {}) => void;
@@ -1383,25 +1383,25 @@ declare namespace IfPlayer {
     "Checked Slots"?: "Entire inventory" | "Main inventory" | "Upper inventory" | "Hotbar" | "Armor";
   }) => void;
   function UsingPack(): (tags: {}) => void;
-  function NoItemCooldown(arg1: Item): (tags: {}) => void;
-  function IsUsingItem(arg1: Item | null): (tags: {}) => void;
+  function NoItemCooldown(...arg1): (tags: {}) => void;
+  function IsUsingItem(...arg1): (tags: {}) => void;
   function IsSwimming(): (tags: {}) => void;
-  function HasItem(arg1: Item): (tags: {
+  function HasItem(...arg1): (tags: {
     "Check Mode"?: "Has Any Item" | "Has All Items";
   }) => void;
-  function IsWearing(arg1: Item): (tags: {
+  function IsWearing(...arg1): (tags: {
     "Check Mode"?: "Is Wearing Some" | "Is Wearing All";
   }) => void;
-  function IsNear(arg1: Location, arg2: Number | null): (tags: {
+  function IsNear(arg1: Location[], arg2: Number | null): (tags: {
     "Shape"?: "Sphere" | "Circle" | "Cube" | "Square";
   }) => void;
   function IsGrounded(): (tags: {}) => void;
-  function CursorItem(arg1: Item | null): (tags: {}) => void;
+  function CursorItem(...arg1): (tags: {}) => void;
   function SlotEquals(arg1: Number): (tags: {}) => void;
-  function IsHolding(arg1: Item | null): (tags: {
+  function IsHolding(...arg1): (tags: {
     "Hand Slot"?: "Either hand" | "Main hand" | "Off hand";
   }) => void;
-  function MenuSlotEquals(arg1: Number, arg2: Item | null): (tags: {}) => void;
+  function MenuSlotEquals(arg1: Number[], ...arg2): (tags: {}) => void;
   function IsBlocking(): (tags: {}) => void;
   function HasPermission(): (tags: {
     "Permission"?: "Owner" | "Developer" | "Builder" | "Developer or builder" | "Whitelisted";
@@ -1411,15 +1411,15 @@ declare namespace IfPlayer {
   }) => void;
   function IsSneaking(): (tags: {}) => void;
   function IsFlying(): (tags: {}) => void;
-  function HasPotion(arg1: PotionEffect): (tags: {
+  function HasPotion(...arg1): (tags: {
     "Check Properties"?: "None" | "Amplifier" | "Duration" | "Amplifier and duration";
     "Check Mode"?: "Has any effect" | "Has all effects";
   }) => void;
-  function NameEquals(arg1: String): (tags: {}) => void;
+  function NameEquals(...arg1): (tags: {}) => void;
   function InvOpen(): (tags: {
     "Inventory Type"?: "Any Inventory" | "Plot Menu" | "Crafting Table" | "Chest" | "Double Chest" | "Ender Chest" | "Shulker Box" | "Barrel" | "Furnace (any)" | "Furnace" | "Blast Furnace" | "Smoker" | "Dropper" | "Dispenser" | "Beacon" | "Hopper" | "Anvil" | "Brewing Stand" | "Cartography Table" | "Smithing Table" | "Loom" | "Grindstone" | "Stonecutter" | "Enchanting Table" | "Trader Menu (any)" | "Villager Menu" | "Wandering Trader Menu" | "Horse Inventory" | "Llama Inventory";
   }) => void;
-  function HasSlotItem(arg1: Number, arg2: Item | null): (tags: {}) => void;
+  function HasSlotItem(arg1: Number[], ...arg2): (tags: {}) => void;
   function IsSprinting(): (tags: {}) => void;
   function IsGliding(): (tags: {}) => void;
 }
