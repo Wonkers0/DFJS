@@ -54,7 +54,8 @@ const compileFolderWithBabel = async (folder: string) => {
   const transpilePromise = Promise.all(
     fs.readdirSync(folder).map(async (file) => {
       const filePath = path.join(folder, file)
-      if (!fs.lstatSync(filePath).isFile()) return
+      if (!fs.lstatSync(filePath).isFile() || filePath.endsWith(".df.ts"))
+        return
       return transpileFile(filePath)
     })
   )
