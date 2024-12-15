@@ -1,6 +1,8 @@
 import generate from "@babel/generator"
 import * as t from "@babel/types"
+import { withType } from "./src/util"
 const actionDump = require("./actiondump.json")
+const materials = require("./materials.json")
 
 const result = t.program([])
 
@@ -31,9 +33,22 @@ const typeMappings = {
   VARIABLE: "Variable",
 }
 
+const scopes = ["Game", "Save", "Line", "Local"]
+
 const threadStarters = ["PlayerEvent", "Function", "Process"]
 
-for (const type of Object.values(typeMappings).concat(threadStarters)) {
+const targets = [
+  "Default",
+  "Selection",
+  "Killer",
+  "Damager",
+  "Victim",
+  "Shooter",
+  "Projectile",
+  "LastEntity",
+]
+
+for (const type of [...scopes, ...threadStarters]) {
   const aliasDeclaration = t.tsTypeAliasDeclaration(
     t.identifier(type),
     null,
@@ -41,6 +56,94 @@ for (const type of Object.values(typeMappings).concat(threadStarters)) {
   )
   t.addComment(aliasDeclaration, "leading", "@ts-ignore") // Avoid duplicate type errors from other npm packages
   result.body.push(aliasDeclaration)
+}
+
+function getItemClassDeclaration(
+  className: string,
+  properties: { [key: string]: t.TSType }
+) {
+  const paramIdentifier = t.identifier("data")
+  paramIdentifier.typeAnnotation = t.tsTypeAnnotation(
+    t.tsTypeLiteral(
+      Object.entries(properties).map(([key, value]) => {
+        const propertySignature = t.tsPropertySignature(
+          t.identifier(key.endsWith("?") ? key.slice(0, -1) : key),
+          t.tsTypeAnnotation(value)
+        )
+
+        if (key.endsWith("?")) propertySignature.optional = true
+        return propertySignature
+      })
+    )
+  )
+
+  const classDeclaration = t.classDeclaration(
+    t.identifier(className),
+    null,
+    t.classBody([
+      t.tsDeclareMethod(null, t.identifier("constructor"), null, [
+        paramIdentifier,
+      ]),
+    ])
+  )
+
+  classDeclaration.declare = true
+  return classDeclaration
+}
+
+const itemClassProperties = {
+  GameValue: {
+    type: t.tsUnionType(
+      actionDump.gameValues.map((gv) =>
+        t.tsLiteralType(t.stringLiteral(gv.icon.name))
+      )
+    ),
+    "target?": t.tsUnionType(
+      targets.map((target) => t.tsLiteralType(t.stringLiteral(target)))
+    ),
+  },
+  Item: {
+    material: t.tsUnionType(
+      materials.map((material) => t.tsLiteralType(t.stringLiteral(material)))
+    ),
+    "name?": t.tsTypeReference(t.identifier("StyledText")),
+    "lore?": t.tsArrayType(t.tsTypeReference(t.identifier("StyledText"))),
+    "quantity?": t.tsNumberKeyword(),
+    "tags?": t.tsTypeLiteral([
+      withType(
+        t,
+        t.tsIndexSignature([
+          withType(t, t.identifier("tag"), t.tsStringKeyword()) as t.Identifier,
+        ]),
+        t.tsUnionType([t.tsStringKeyword(), t.tsNumberKeyword()])
+      ) as t.TSIndexSignature,
+    ]),
+  },
+  Location: {
+    x: t.tsNumberKeyword(),
+    y: t.tsNumberKeyword(),
+    z: t.tsNumberKeyword(),
+    "pitch?": t.tsNumberKeyword(),
+    "yaw?": t.tsNumberKeyword(),
+  },
+  Vector: {
+    x: t.tsNumberKeyword(),
+    y: t.tsNumberKeyword(),
+    z: t.tsNumberKeyword(),
+  },
+  Sound: {
+    type: t.tsUnionType(
+      actionDump.sounds.map((sound) =>
+        t.tsLiteralType(t.stringLiteral(sound.icon.name))
+      )
+    ),
+  },
+} as { [key: string]: { [key: string]: t.TSType } }
+
+for (const [key, value] of Object.entries(itemClassProperties)) {
+  const classDeclaration = getItemClassDeclaration(key, value)
+  t.addComment(classDeclaration, "leading", "@ts-ignore") // Avoid duplicate type errors from other npm packages
+  result.body.push(classDeclaration)
 }
 
 const bannedSubstrings = [
@@ -55,13 +158,14 @@ const bannedSubstrings = [
   "*",
   ">",
   "<",
+  " ",
 ]
 
 for (const [key, value] of Object.entries(namespaces)) {
   const moduleDeclaration = t.tsModuleDeclaration(
     t.identifier(key),
     t.tsModuleBlock(
-      actionDump
+      actionDump.actions
         .filter(
           (b) =>
             b.codeblockName === value &&
@@ -95,6 +199,8 @@ for (const [key, value] of Object.entries(namespaces)) {
                 ? t.tsTypeReference(
                     t.identifier(typeMappings[action.icon.returnValues[0].type])
                   )
+                : value === "REPEAT"
+                ? t.tsBooleanKeyword()
                 : t.tsVoidKeyword()
             )
           )

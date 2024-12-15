@@ -1,5 +1,5 @@
 import * as BabelTypes from "@babel/types"
-const actionDump = require("../actiondump.json")
+const actionDump = require("../actiondump.json").actions
 
 export const { values: flags } = parseArgs({
   args: process.argv,
@@ -73,16 +73,11 @@ export function getVarScope(identifier: Identifier) {
 }
 
 export function getLineVar(t: typeof BabelTypes, name: string) {
-  // Create identifier node
-  const identifierNode = t.identifier(name)
-
-  // Set variable scope to 'local'
-  identifierNode.typeAnnotation = t.tsTypeAnnotation(
-    // @ts-ignore I'm probably doing some illegal things here to recreate the AST from the babel parser
+  return withType(
+    t,
+    t.identifier(name),
     t.tsTypeReference(t.identifier("line"))
   )
-
-  return identifierNode
 }
 
 export function getElseObject(t: typeof BabelTypes) {
@@ -297,4 +292,14 @@ export function isBooleanContext(
   }
 
   return t.isUnaryExpression(init)
+}
+
+export function withType(
+  t: typeof BabelTypes,
+  node: BabelTypes.Node,
+  type: BabelTypes.TSType
+): BabelTypes.Node {
+  // @ts-ignore
+  node.typeAnnotation = t.tsTypeAnnotation(type)
+  return node
 }
