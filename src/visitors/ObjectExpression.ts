@@ -16,6 +16,8 @@ export default (
 ) =>
   ({
     exit(path) {
+      if (t.isNewExpression(path.parent)) return
+
       const { properties } = path.node
       const dictName = getTempName()
       threadContents.push(
