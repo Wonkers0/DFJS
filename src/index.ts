@@ -32,8 +32,10 @@ const transpileFile = async (filePath: string) => {
   return Object.fromEntries(keys.map((k: any, i: number) => [k, values[i]]))
 }
 
-const sendToGame = (ws: WebSocket, templates: string[]) => {
+const sendToGame = async (ws: WebSocket, templates: string[]) => {
   if (ws.readyState === WebSocket.OPEN) {
+    ws.send("mode dev")
+    await wait(250)
     ws.send("place swap")
     templates.forEach((template) => ws.send(`place ${template}`))
     ws.send("place go")
@@ -132,14 +134,10 @@ const main = async () => {
             .map(([k]) => k)
             .join(", ")} (${ms}ms)`
         )
-        ws.send("mode dev")
-        setTimeout(
-          () =>
-            sendToGame(
-              ws,
-              templateEntries.map(([_, v]) => v)
-            ),
-          500
+
+        sendToGame(
+          ws,
+          templateEntries.map(([_, v]) => v)
         )
       } catch (error) {
         spinner.fail(`Failed to re-transpile ${filename}`)
@@ -153,6 +151,10 @@ const main = async () => {
     ws.close()
     process.exit(0)
   })
+}
+
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 main().catch((error) => {

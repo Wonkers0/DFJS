@@ -20,15 +20,15 @@ export default (
       if ((path.parent as BabelTypes.IfStatement).alternate == path.node)
         threadContents.push(getElseObject(t))
 
-      if (path.findParent((p) => p.isIfStatement()))
+      if (t.isIfStatement(path.parent))
         threadContents.push(getBracketObject(t, "norm", true))
-      else if (path.findParent((p) => p.isLoop()))
+      else if (t.isLoop(path.parent))
         threadContents.push(getBracketObject(t, "sticky", true))
     },
     exit(path) {
-      if (path.findParent((p) => p.isIfStatement()))
+      if (t.isIfStatement(path.parent))
         threadContents.push(getBracketObject(t, "norm", false))
-      else if (path.findParent((p) => p.isLoop()))
+      else if (t.isLoop(path.parent))
         threadContents.push(getBracketObject(t, "sticky", false))
 
       const sibling = path.getPrevSibling().node
