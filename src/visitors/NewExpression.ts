@@ -97,6 +97,12 @@ function arrayParamsToObj(
         amplifier: args[1],
         duration: args[2],
       }
+    case "Sound":
+      return {
+        type: args[0],
+        pitch: args[1],
+        volume: args[2],
+      }
     default:
       return {}
   }

@@ -17,6 +17,7 @@ import AnyTypeAnnotationVisitor from "./visitors/AnyTypeAnnotation"
 import WhileStatementVisitor from "./visitors/WhileStatement"
 import LogicalExpVisitor from "./visitors/LogicalExpression"
 import BooleanLiteralVisitor from "./visitors/BooleanLiteral"
+import ObjectExpVisitor from "./visitors/ObjectExpression"
 
 export default (
   t: typeof BabelTypes,
@@ -38,4 +39,5 @@ export default (
   WhileStatement: WhileStatementVisitor(t, threadContents),
   LogicalExpression: LogicalExpVisitor(t, threadContents),
   BooleanLiteral: BooleanLiteralVisitor(t, threadContents),
+  ObjectExpression: ObjectExpVisitor(t, threadContents),
 })
