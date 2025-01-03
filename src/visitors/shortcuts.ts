@@ -57,6 +57,24 @@ export default {
   "SelectObject.Victim": (t) => EventTarget(t, "Victim"),
   "SelectObject.Shooter": (t) => EventTarget(t, "Shooter"),
   "SelectObject.Projectile": (t) => EventTarget(t, "Projectile"),
+  "console.log": (t, tempVar, args) => [
+    getBlockObject(
+      t,
+      "player_action",
+      "SendMessage",
+      args.map((arg, i) =>
+        getArgObject(
+          t,
+          i,
+          getValueData(t, arg as any),
+          getValueType(t, arg as any)
+        )
+      ),
+      {
+        target: t.stringLiteral("AllPlayers"),
+      }
+    ),
+  ],
 } as {
   [key: string]: (
     t: typeof BabelTypes,

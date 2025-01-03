@@ -120,7 +120,7 @@ declare namespace PlayerAction {
     "Row to Remove"?: "Top row" | "Bottom row";
   }) => void;
   function WakeUpAnimation(): (tags: {}) => void;
-  function DisableBlocks(): (tags: {}) => void;
+  function DisableBlocks(...arg1): (tags: {}) => void;
   function SetScoreObj(arg1: StyledText): (tags: {}) => void;
   function ClearInv(): (tags: {
     "Clear Mode"?: "Entire inventory" | "Main inventory" | "Upper inventory" | "Hotbar" | "Armor";
@@ -183,7 +183,7 @@ declare namespace PlayerAction {
     "Keep Current Rotation"?: "True" | "False";
   }) => void;
   function MobDisguise(arg1: StyledText | null): (tags: {}) => void;
-  function EnableBlocks(): (tags: {}) => void;
+  function EnableBlocks(...arg1): (tags: {}) => void;
   function OpenBlockInv(arg1: Location): (tags: {}) => void;
   function ParticleCircleA(arg1: Particle, arg2: Location, arg3: Number | null, arg4: Number | null): (tags: {}) => void;
   function SetEquipment(arg1: Item | null): (tags: {
@@ -293,7 +293,7 @@ declare namespace PlayerAction {
   function RemoveScore(arg1: StyledText): (tags: {}) => void;
   function SetExhaustion(arg1: Number): (tags: {}) => void;
   function ParticleCircle(arg1: Particle, arg2: Location, arg3: Number | null): (tags: {}) => void;
-  function DisplayBlock(arg1: Location, arg2: Location | null): (tags: {}) => void;
+  function DisplayBlock(arg1: Item, arg2: Location, arg3: Location | null, ...arg4): (tags: {}) => void;
   function RideEntity(arg1: String[], arg2: StyledText[]): (tags: {
     "Ignore Formatting"?: "True" | "False";
   }) => void;
@@ -354,7 +354,7 @@ declare namespace PlayerAction {
   function SaveInv(): (tags: {}) => void;
   function OpenBook(arg1: Item): (tags: {}) => void;
   function SetHealth(arg1: Number): (tags: {}) => void;
-  function BlockDisguise(arg1: StyledText | null): (tags: {}) => void;
+  function BlockDisguise(arg1: Item, arg2: StyledText | null): (tags: {}) => void;
   function RollbackBlocks(arg1: Number | null): (tags: {}) => void;
   function WalkSpeed(arg1: Number): (tags: {}) => void;
   function SetCollidable(): (tags: {
@@ -526,7 +526,7 @@ declare namespace SetVariable {
     "Coordinate Type"?: "Plot coordinate" | "World coordinate";
   }) => void;
   function RGBColor(arg1: Variable, arg2: Number, arg3: Number, arg4: Number): (tags: {}) => void;
-  function SetCanDestroy(arg1: Variable, arg2: Item | null): (tags: {}) => void;
+  function SetCanDestroy(arg1: Variable, arg2: Item | null, ...arg3): (tags: {}) => void;
   function HSLColor(arg1: Variable, arg2: Number, arg3: Number | null, arg4: Number | null): (tags: {}) => void;
   function GetItemLore(arg1: Variable, arg2: Item): (tags: {}) => void;
   function RemoveListIndex(arg1: Variable, ...arg2): (tags: {}) => void;
@@ -591,7 +591,7 @@ declare namespace SetVariable {
   function Root(arg1: Variable, arg2: Number | null, arg3: Number | null): (tags: {}) => Number;
   function SetParticleAmount(arg1: Variable, arg2: Particle | null, arg3: Number): (tags: {}) => void;
   function AddItemEnchant(arg1: Variable, arg2: Item | null, arg3: String, arg4: Number): (tags: {}) => void;
-  function AddItemToolRule(arg1: Variable, arg2: Item | null, arg3: Number, arg4: String): (tags: {
+  function AddItemToolRule(arg1: Variable, arg2: Item | null, arg3: Number, arg4: Item[], arg5: String): (tags: {
     "Correct Tool for Loot"?: "True" | "False";
   }) => void;
   function GetItemType(arg1: Variable, arg2: Item): (tags: {
@@ -765,7 +765,7 @@ declare namespace SetVariable {
     "Domain Fractal"?: "Progressive" | "Independent";
     "Return Type"?: "Value" | "Cubic";
   }) => Number;
-  function SetCanPlaceOn(arg1: Variable, arg2: Item | null): (tags: {}) => void;
+  function SetCanPlaceOn(arg1: Variable, arg2: Item | null, ...arg3): (tags: {}) => void;
   function GetBlockType(arg1: Variable, arg2: Location): (tags: {
     "Return Value Type"?: "Block ID (oak_log)" | "Block name (Oak Log)" | "Item";
   }) => String;
@@ -857,7 +857,7 @@ declare namespace EntityAction {
     "Hide Name Tag"?: "True" | "False" | "Don't change";
   }) => void;
   function Jump(): (tags: {}) => void;
-  function BDisplayBlock(): (tags: {}) => void;
+  function BDisplayBlock(arg1: Item, ...arg2): (tags: {}) => void;
   function SetFreezeTicks(arg1: Number): (tags: {
     "Ticking Locked"?: "Enable" | "Disable";
   }) => void;
@@ -880,7 +880,7 @@ declare namespace EntityAction {
     "Wolf Type"?: "Ashen" | "Black" | "Chestnut" | "Pale" | "Rusty" | "Snowy" | "Spotted" | "Striped" | "Woods";
   }) => void;
   function DispInterpolation(arg1: Number | null, arg2: Number | null): (tags: {}) => void;
-  function SetEndermanBlock(): (tags: {}) => void;
+  function SetEndermanBlock(arg1: Item): (tags: {}) => void;
   function LaunchToward(arg1: Location, arg2: Number | null): (tags: {
     "Add to Current Velocity"?: "True" | "False";
     "Ignore Distance"?: "True" | "False";
@@ -911,7 +911,7 @@ declare namespace EntityAction {
     "Has Stinger"?: "Enable" | "Disable";
   }) => void;
   function MobDisguise(arg1: StyledText | null): (tags: {}) => void;
-  function SetMinecartBlock(arg1: Number | null): (tags: {}) => void;
+  function SetMinecartBlock(arg1: Item, arg2: Number | null): (tags: {}) => void;
   function FoxSleeping(): (tags: {
     "Sleeping"?: "Enable" | "Disable";
   }) => void;
@@ -1118,7 +1118,7 @@ declare namespace EntityAction {
     "Model Type"?: "None" | "First Person Left Hand" | "First Person Right Hand" | "Third Person Left Hand" | "Third Person Right Hand" | "Head" | "GUI" | "Ground" | "Fixed";
   }) => void;
   function SetHealth(arg1: Number): (tags: {}) => void;
-  function BlockDisguise(arg1: StyledText | null): (tags: {}) => void;
+  function BlockDisguise(arg1: Item, arg2: StyledText | null): (tags: {}) => void;
   function SetCollidable(): (tags: {
     "Collision"?: "Enable" | "Disable";
   }) => void;
@@ -1193,7 +1193,7 @@ declare namespace IfVariable {
     "Location Handling"?: "Block" | "Exact";
   }) => void;
   function VarExists(arg1: Variable): (tags: {}) => void;
-  function BlockIsSolid(): (tags: {}) => void;
+  function BlockIsSolid(arg1: Item): (tags: {}) => void;
   function ItemEquals(arg1: Item, ...arg2): (tags: {
     "Comparison Mode"?: "Exactly equals" | "Ignore stack size" | "Ignore durability and stack size" | "Material only";
   }) => void;
@@ -1281,8 +1281,8 @@ declare namespace GameAction {
     "Request Method"?: "Post" | "Get" | "Put" | "Delete";
     "Content Type"?: "text/plain" | "application/json";
   }) => void;
-  function WriteTransaction(arg1: Location, arg2: Location): (tags: {}) => void;
-  function SetBlockData(arg1: Location[]): (tags: {
+  function WriteTransaction(arg1: Item, arg2: Location, arg3: Location, arg4: String | null): (tags: {}) => void;
+  function SetBlockData(arg1: Location[], ...arg2): (tags: {
     "Overwrite Existing Data"?: "True" | "False";
   }) => void;
   function Firework(arg1: Item, arg2: Location): (tags: {
@@ -1313,7 +1313,7 @@ declare namespace GameAction {
   function SpawnArmorStand(arg1: Location, arg2: StyledText | null, ...arg3): (tags: {
     "Visibility"?: "Visible" | "Visible (No hitbox)" | "Invisible" | "Invisible (No hitbox)";
   }) => void;
-  function SpawnBlockDisp(arg1: Location): (tags: {}) => void;
+  function SpawnBlockDisp(arg1: Location, arg2: Item, ...arg3): (tags: {}) => void;
   function ClearContainer(arg1: Location): (tags: {}) => void;
   function CancelEvent(): (tags: {}) => void;
   function SpawnFangs(arg1: Location, arg2: StyledText | null): (tags: {}) => void;
@@ -1327,7 +1327,7 @@ declare namespace GameAction {
   function BoneMeal(arg1: Location[], arg2: Number | null): (tags: {
     "Show Particles"?: "True" | "False";
   }) => void;
-  function FallingBlock(arg1: Location): (tags: {
+  function FallingBlock(arg1: Location, arg2: Item, arg3: (String | null)[]): (tags: {
     "Hurt Hit Entities"?: "True" | "False";
     "Reform on Impact"?: "True" | "False";
   }) => void;
@@ -1343,7 +1343,7 @@ declare namespace GameAction {
   }) => void;
   function SpawnPotionCloud(arg1: Location, arg2: (PotionEffect | null)[], arg3: StyledText | null, arg4: Number | null, arg5: Number | null): (tags: {}) => void;
   function LaunchProj(arg1: Location, arg2: StyledText | null, arg3: Number | null, arg4: Number | null): (tags: {}) => void;
-  function SetBlock(arg1: Location[]): (tags: {}) => void;
+  function SetBlock(arg1: Item, arg2: Location[], ...arg3): (tags: {}) => void;
   function SpawnItemDisp(arg1: Location, arg2: Item): (tags: {}) => void;
   function SetBlockGrowth(arg1: Location, arg2: Number | null): (tags: {
     "Growth Unit"?: "Growth Stage Number" | "Growth Percentage";
@@ -1351,7 +1351,7 @@ declare namespace GameAction {
   function SetContainerName(arg1: Location, arg2: StyledText): (tags: {}) => void;
   function SetHead(arg1: Location, arg2: Item, arg3: String): (tags: {}) => void;
   function RemoveItems(arg1: Location, ...arg2): (tags: {}) => void;
-  function SetRegion(arg1: Location, arg2: Location): (tags: {}) => void;
+  function SetRegion(arg1: Item, arg2: Location, arg3: Location, arg4: String | null): (tags: {}) => void;
   function SpawnTNT(arg1: Location, arg2: Number | null, arg3: Number | null, arg4: StyledText | null): (tags: {}) => void;
   function SpawnExpOrb(arg1: Location, arg2: Number | null, arg3: StyledText | null): (tags: {}) => void;
   function SetBiome(arg1: String, arg2: Location, arg3: Location): (tags: {}) => void;
@@ -1378,7 +1378,7 @@ declare namespace IfGame {
   function HasRoomForItem(arg1: Location, arg2: Item | null): (tags: {
     "Check Mode"?: "Has Room for Any Item" | "Has Room for All Items";
   }) => void;
-  function EventBlockEquals(): (tags: {}) => void;
+  function EventBlockEquals(...arg1): (tags: {}) => void;
   function CommandEquals(...arg1): (tags: {
     "Check Mode"?: "Check entire command" | "Check beginning";
     "Ignore Case"?: "True" | "False";
@@ -1393,7 +1393,7 @@ declare namespace IfGame {
   }) => void;
   function AttackIsCrit(): (tags: {}) => void;
   function ContainerHas(arg1: Location, ...arg2): (tags: {}) => void;
-  function BlockEquals(arg1: Location): (tags: {}) => void;
+  function BlockEquals(arg1: Location, arg2: (Item | null)[], ...arg3): (tags: {}) => void;
   function InBlock(arg1: Location): (tags: {}) => void;
   function BlockPowered(...arg1): (tags: {
     "Redstone Power Mode"?: "Direct power" | "Indirect power";
@@ -1429,10 +1429,10 @@ declare namespace IfEntity {
   function NameEquals(arg1: String[], arg2: StyledText[]): (tags: {
     "Ignore Formatting"?: "True" | "False";
   }) => void;
-  function StandingOn(arg1: Location[]): (tags: {}) => void;
+  function StandingOn(arg1: Item[], arg2: Location[]): (tags: {}) => void;
 }
 declare namespace IfPlayer {
-  function IsLookingAt(arg1: Location[], arg2: Number | null): (tags: {
+  function IsLookingAt(arg1: (Item | null)[], arg2: Location[], arg3: Number | null): (tags: {
     "Fluid Mode"?: "Ignore fluids" | "Detect fluids";
   }) => void;
   function InWorldBorder(arg1: Location | null): (tags: {}) => void;
@@ -1456,7 +1456,7 @@ declare namespace IfPlayer {
   function IsNear(arg1: Location[], arg2: Number | null): (tags: {
     "Shape"?: "Sphere" | "Circle" | "Cube" | "Square";
   }) => void;
-  function StandingOn(arg1: Location[]): (tags: {}) => void;
+  function StandingOn(arg1: (Item | null)[], arg2: Location[]): (tags: {}) => void;
   function IsGrounded(): (tags: {}) => void;
   function CursorItem(...arg1): (tags: {}) => void;
   function SlotEquals(arg1: Number): (tags: {}) => void;

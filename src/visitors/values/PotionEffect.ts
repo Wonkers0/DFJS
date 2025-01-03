@@ -24,9 +24,10 @@ export default function PotionEffect(
         },
         "var"
       ),
+      getArgObject(t, 1, { pot: "Absorption", dur: 1000000, amp: 0 }, "pot"), // SetPotionType does not work without a default potion
       getArgObject(
         t,
-        1,
+        2,
         getValueData(t, constructor.type as ValidLiteral),
         getValueType(t, constructor.type as ValidLiteral)
       ),

@@ -28,13 +28,22 @@ export default (
         callee.tags = (
           args[0] as BabelTypes.ObjectExpression
         ).properties.reduce((acc: Record<string, any>, prop) => {
-          acc[
-            ((prop as BabelTypes.ObjectProperty).key as ValidLiteral)
-              .value as string
-          ] = ((prop as BabelTypes.ObjectProperty).value as ValidLiteral).value
+          const key = (prop as BabelTypes.ObjectProperty).key
+          // @ts-ignore
+          acc[key.value ?? key.name] = (
+            (prop as BabelTypes.ObjectProperty).value as ValidLiteral
+          ).value
           return acc
         }, {})
         path.replaceWith(callee)
+      }
+
+      if (t.isMemberExpression(callee) && t.isMemberExpression(callee.object)) {
+        // @ts-ignore
+        callee.object.subAction = (
+          callee.property as BabelTypes.Identifier
+        ).name
+        path.replaceWith(t.callExpression(callee.object, args))
       }
     },
     exit(path) {
@@ -136,6 +145,13 @@ function CodeAction(
   // @ts-ignore
   const { callee, arguments: args, tags } = path.node
   const expression = callee as BabelTypes.MemberExpression
+  const parsedCallee = parseCallee(t, callee as BabelTypes.Expression)
+
+  if (
+    parsedCallee?.startsWith("SetVariable.") &&
+    path.findParent((p) => t.isVariableDeclarator(p.node))
+  )
+    args.unshift(t.identifier(getTempName()))
 
   threadContents.push(
     getBlockObject(
@@ -156,16 +172,23 @@ function CodeAction(
               )
         )
         .filter(Boolean),
-      // @ts-ignore
-      actionBlocks[expression.object.name] === "start_process"
-        ? {
-            // @ts-ignore
-            data: t.stringLiteral(expression.property.name),
-          }
-        : undefined,
+      {
+        // @ts-ignore
+        ...(actionBlocks[expression.object.name] === "start_process"
+          ? {
+              // @ts-ignore
+              data: t.stringLiteral(expression.property.name),
+            }
+          : {}),
+        // @ts-ignore
+        // prettier-ignore
+        ...(callee.subAction ? {subAction: t.stringLiteral(callee.subAction)} : {}),
+      },
       tags
     )
   )
+
+  SpecialCases(t, path)
 }
 
 export function booleanContext(
@@ -205,4 +228,33 @@ export function booleanContext(
     insertedNode.traverse(visitors(t, threadContents) as Visitor<unknown>)
     insertedNode.shouldSkip = true
   }
+}
+
+function SpecialCases(
+  t: typeof BabelTypes,
+  path: NodePath<BabelTypes.CallExpression>
+) {
+  const { callee } = path.node
+  const parsedCallee = parseCallee(t, callee as BabelTypes.Expression)
+  if (!parsedCallee) return
+
+  if (
+    parsedCallee.startsWith("GameAction.Spawn") &&
+    path.findParent((p) => t.isVariableDeclarator(p.node))
+  )
+    path.replaceWith(
+      t.newExpression(t.identifier("GameValue"), [
+        t.objectExpression([
+          t.objectProperty(t.identifier("type"), t.stringLiteral("UUID")),
+          t.objectProperty(
+            t.identifier("target"),
+            t.stringLiteral("LastEntity")
+          ),
+        ]),
+      ])
+    )
+  if (parsedCallee.startsWith("SetVariable."))
+    path.replaceWith(
+      t.identifier((path.node.arguments[0] as BabelTypes.Identifier).name)
+    )
 }

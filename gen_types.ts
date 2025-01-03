@@ -31,6 +31,8 @@ const typeMappings = {
   COMPONENT: "StyledText",
   SOUND: "Sound",
   VARIABLE: "Variable",
+  BLOCK: "Item",
+  BLOCK_TAG: "String",
 }
 
 const scopes = ["Game", "Save", "Line", "Local"]

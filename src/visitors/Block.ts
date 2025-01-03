@@ -7,6 +7,7 @@ import {
 } from "../util.js"
 import { VisitNode } from "@babel/traverse"
 import { PluginOptions } from "@babel/core"
+import visitors from "../visitors.js"
 
 export default (
   t: typeof BabelTypes,
@@ -31,13 +32,21 @@ export default (
         threadContents.push(getBracketObject(t, "sticky", false))
 
       const sibling = path.getPrevSibling().node
-      if (
-        t.isExpressionStatement(sibling) &&
-        t.isCallExpression(sibling.expression) &&
-        t.isMemberExpression(sibling.expression.callee) &&
-        t.isIdentifier(sibling.expression.callee.object) &&
-        sibling.expression.callee.object.name == "SelectObject"
-      )
-        threadContents.push(getBlockObject(t, "select_obj", "Reset"))
+      if (isSelectObject(t, sibling)) {
+        const parentSelect = path
+          .findParent((p) => t.isBlock(p.node))
+          ?.getPrevSibling()
+        isSelectObject(t, parentSelect?.node)
+          ? parentSelect?.traverse(visitors(t, threadContents) as any)
+          : threadContents.push(getBlockObject(t, "select_obj", "Reset"))
+      }
     },
   } as VisitNode<PluginOptions, BabelTypes.Block>)
+
+const isSelectObject = (t: typeof BabelTypes, node?: BabelTypes.Node) =>
+  node &&
+  t.isExpressionStatement(node) &&
+  t.isCallExpression(node.expression) &&
+  t.isMemberExpression(node.expression.callee) &&
+  t.isIdentifier(node.expression.callee.object) &&
+  node.expression.callee.object.name == "SelectObject"

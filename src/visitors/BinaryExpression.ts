@@ -28,6 +28,7 @@ export default (
         case "/":
         case "*":
         case "**":
+        case "%":
           arithmeticContext(t, threadContents, path)
           break
         case "==":
@@ -37,7 +38,9 @@ export default (
         case "<":
         case ">=":
         case "<=":
-          if (!path.findParent((p) => t.isIfStatement(p.node)))
+          if (!t.isIfStatement(path.parent))
+            // 👆 Conditional contexts occur only when direct parents are if statements
+            // e.g. binary expressions inside an if-statement should still be parsed in a boolean context
             booleanContext(t, threadContents, path, path.node)
           else conditionalContext(t, threadContents, path)
           break
@@ -58,6 +61,7 @@ function arithmeticContext(
     "/": "/",
     "*": "x",
     "**": "Exponent",
+    "%": "%",
   }
 
   const tempVar = getTempName()

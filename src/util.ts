@@ -1,5 +1,5 @@
-import * as BabelTypes from "@babel/types";
-const actionDump = require("../actiondump.json").actions;
+import * as BabelTypes from "@babel/types"
+const actionDump = require("../actiondump.json").actions
 
 export const { values: flags } = parseArgs({
   args: process.argv,
@@ -19,10 +19,13 @@ export const { values: flags } = parseArgs({
     nosplitting: {
       type: "boolean",
     },
+    clear: {
+      type: "boolean",
+    },
   },
   strict: true,
   allowPositionals: true,
-});
+})
 
 import {
   ArrayExpression,
@@ -32,22 +35,22 @@ import {
   ObjectExpression,
   RegExpLiteral,
   TemplateLiteral,
-} from "../node_modules/@babel/types/lib/index";
+} from "../node_modules/@babel/types/lib/index"
 
-import { nanoid } from "nanoid";
-import { parseArgs } from "node:util";
+import { customRandom, nanoid, urlAlphabet } from "nanoid"
+import { parseArgs } from "node:util"
 
 export type ValidLiteral = Exclude<
   Literal,
   NullLiteral | RegExpLiteral | TemplateLiteral
->;
+>
 // These excluded types will be parsed by visitors before being processed here 👆
 export function getValue(
   t: typeof BabelTypes,
   value: ValidLiteral | Identifier
 ) {
-  if (t.isIdentifier(value)) return (value as Identifier).name;
-  else return (value as ValidLiteral).value;
+  if (t.isIdentifier(value)) return (value as Identifier).name
+  else return (value as ValidLiteral).value
 }
 
 export function getVarScope(identifier: Identifier) {
@@ -58,7 +61,7 @@ export function getVarScope(identifier: Identifier) {
     game: "unsaved",
     save: "saved",
     line: "line",
-  };
+  }
 
   //@ts-ignore I cannot figure out babel types to save my life
   // prettier-ignore
@@ -68,8 +71,8 @@ export function getVarScope(identifier: Identifier) {
       `Variable scope ${scope} is not recognized. Acceptable scope values are: ${Object.keys(
         varScopes
       )}`
-    );
-  return varScopes[scope as keyof typeof varScopes];
+    )
+  return varScopes[scope as keyof typeof varScopes]
 }
 
 export function getLineVar(t: typeof BabelTypes, name: string) {
@@ -77,14 +80,14 @@ export function getLineVar(t: typeof BabelTypes, name: string) {
     t,
     t.identifier(name),
     t.tsTypeReference(t.identifier("line"))
-  );
+  )
 }
 
 export function getElseObject(t: typeof BabelTypes) {
   return t.objectExpression([
     t.objectProperty(t.stringLiteral("id"), t.stringLiteral("block")),
     t.objectProperty(t.stringLiteral("block"), t.stringLiteral("else")),
-  ]);
+  ])
 }
 
 export function parseObjectExpression(
@@ -92,29 +95,34 @@ export function parseObjectExpression(
   expression: ObjectExpression
 ) {
   return expression.properties.reduce((acc, prop) => {
-    const key = (prop as BabelTypes.ObjectProperty).key;
+    const key = (prop as BabelTypes.ObjectProperty).key
     const resolvedKey = t.isStringLiteral(key)
       ? key.value
-      : (key as Identifier).name;
+      : (key as Identifier).name
     const value = (prop as BabelTypes.ObjectProperty)
-      .value as BabelTypes.Expression;
-    acc[resolvedKey] = value;
-    return acc;
-  }, {} as { [key: string]: BabelTypes.Expression });
+      .value as BabelTypes.Expression
+    acc[resolvedKey] = value
+    return acc
+  }, {} as { [key: string]: BabelTypes.Expression })
 }
 
 // Generate random names ahead of time to avoid shifts in transpilation hashes
 // Otherwise the names will be different every time and the transpiler won't know which functions changed
-const names = new Array(9999).fill(() => nanoid());
+const names = new Array(9999).fill(0).map(() => nanoid())
+let nameCopy = [...names]
 export function getTempName() {
-  return `DFJS_${names.shift()}`;
+  return `DFJS_${nameCopy.shift()}`
+}
+
+export function resetVarNames() {
+  nameCopy = [...names]
 }
 
 const blockNameMappings = {
   "IF VARIABLE": "if_var",
   "SET VARIABLE": "set_var",
   "SELECT OBJECT": "select_obj",
-};
+}
 
 export function getBlockTags(
   t: typeof BabelTypes,
@@ -129,8 +137,8 @@ export function getBlockTags(
           block.codeblockName as keyof typeof blockNameMappings
         ] == blockType) &&
       (block.name == blockAction || block.name == "dynamic")
-  )?.tags;
-  if (!tags) return [];
+  )?.tags
+  if (!tags) return []
 
   return tags
     .map((tag: any) =>
@@ -146,7 +154,7 @@ export function getBlockTags(
         "bl_tag"
       )
     )
-    .reverse();
+    .reverse()
 }
 
 export function getBlockObject(
@@ -157,7 +165,7 @@ export function getBlockObject(
   customAttributes: { [key: string]: any } = {},
   tagValues: { [tag: string]: string } = {}
 ) {
-  const tags = getBlockTags(t, blockType, blockAction, tagValues);
+  const tags = getBlockTags(t, blockType, blockAction, tagValues)
 
   return t.objectExpression([
     t.objectProperty(t.stringLiteral("id"), t.stringLiteral("block")),
@@ -175,7 +183,7 @@ export function getBlockObject(
     ...Object.entries(customAttributes).map(([key, value]) =>
       t.objectProperty(t.stringLiteral(key), value)
     ),
-  ]) as BabelTypes.ObjectExpression;
+  ]) as BabelTypes.ObjectExpression
 }
 
 export function getBracketObject(
@@ -190,7 +198,7 @@ export function getBracketObject(
       t.stringLiteral("direct"),
       t.stringLiteral(open ? "open" : "close")
     ),
-  ]);
+  ])
 }
 
 export function getArgObject(
@@ -209,7 +217,7 @@ export function getArgObject(
       ])
     ),
     t.objectProperty(t.stringLiteral("slot"), t.numericLiteral(slot)), // The slot that this argument is in the chest
-  ]);
+  ])
 }
 
 export function getValueData(
@@ -225,7 +233,7 @@ export function getValueData(
             : "line",
         }
       : {}),
-  };
+  }
 }
 
 export function getValueType(
@@ -237,14 +245,14 @@ export function getValueType(
     return (value as unknown as any).typeAnnotation?.typeAnnotation?.typeName
       ?.name === "StyledText"
       ? "comp"
-      : "txt";
+      : "txt"
   } else if (t.isNumericLiteral(value)) {
-    return "num";
+    return "num"
   } else if (t.isIdentifier(value)) {
-    return "var";
+    return "var"
   } // ... more types (TO DO)
   else {
-    throw new Error("Unsupported value type: " + value.type);
+    throw new Error("Unsupported value type: " + value.type)
   }
 }
 
@@ -255,47 +263,47 @@ export function parseValueToLiteral(
   // Generated by ChatGPT 🤠
   // This is pretty self-explanatory though (I hope)
   if (typeof value === "number") {
-    return t.numericLiteral(value);
+    return t.numericLiteral(value)
   } else if (typeof value === "string") {
-    return t.stringLiteral(value);
+    return t.stringLiteral(value)
   } else if (typeof value === "boolean") {
-    return t.booleanLiteral(value);
+    return t.booleanLiteral(value)
   } else if (Array.isArray(value)) {
     return t.arrayExpression(
       value.map((value) => parseValueToLiteral(t, value))
-    );
+    )
   } else if (typeof value === "object") {
     const properties = Object.entries(value).map(([key, val]) => {
-      const keyNode = t.stringLiteral(key);
-      const valNode = parseValueToLiteral(t, val);
-      return t.objectProperty(keyNode, valNode);
-    });
-    return t.objectExpression(properties);
+      const keyNode = t.stringLiteral(key)
+      const valNode = parseValueToLiteral(t, val)
+      return t.objectProperty(keyNode, valNode)
+    })
+    return t.objectExpression(properties)
   }
 
-  throw new Error("Unsupported value type: " + typeof value);
+  throw new Error("Unsupported value type: " + typeof value)
 }
 
-const booleanOperators = ["==", "===", "!=", "!==", ">", "<", ">=", "<="];
+const booleanOperators = ["==", "===", "!=", "!==", ">", "<", ">=", "<="]
 export function isBooleanContext(
   t: typeof BabelTypes,
   init: BabelTypes.Expression | null | undefined
 ) {
   if (t.isBinaryExpression(init) && booleanOperators.includes(init.operator))
-    return true;
+    return true
   if (t.isCallExpression(init)) {
-    const callExp = init as BabelTypes.CallExpression;
+    const callExp = init as BabelTypes.CallExpression
     if (t.isMemberExpression(callExp.callee)) {
-      const memberExp = callExp.callee as BabelTypes.MemberExpression;
+      const memberExp = callExp.callee as BabelTypes.MemberExpression
       if (
         t.isIdentifier(memberExp.object) &&
         memberExp.object.name.includes("If")
       )
-        return true;
+        return true
     }
   }
 
-  return t.isUnaryExpression(init);
+  return t.isUnaryExpression(init)
 }
 
 export function withType(
@@ -305,8 +313,8 @@ export function withType(
   optional: boolean | null = null
 ): BabelTypes.Node {
   // @ts-ignore
-  node.typeAnnotation = t.tsTypeAnnotation(type);
+  node.typeAnnotation = t.tsTypeAnnotation(type)
   // @ts-ignore
-  if (optional != null) node.optional = optional;
-  return node;
+  if (optional != null) node.optional = optional
+  return node
 }
