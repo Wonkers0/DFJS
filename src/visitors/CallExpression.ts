@@ -136,10 +136,7 @@ function CodeAction(
   threadContents: BabelTypes.ObjectExpression[],
   path: NodePath<BabelTypes.CallExpression>
 ) {
-  if (
-    isBooleanContext(t, path.node) &&
-    !path.findParent((p) => t.isIfStatement(p.node))
-  )
+  if (isBooleanContext(t, path.node) && !t.isIfStatement(path.parent))
     return booleanContext(t, threadContents, path, path.node)
 
   // @ts-ignore

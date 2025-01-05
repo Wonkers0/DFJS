@@ -8,6 +8,7 @@ export default (
 ) =>
   ({
     exit(path) {
-      path.replaceWith(t.numericLiteral(1))
+      const { value } = path.node
+      path.replaceWith(t.numericLiteral(Number(value)))
     },
   } as VisitNode<PluginOptions, BabelTypes.BooleanLiteral>)
